@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Architecture of an Unspoken Vow — Muntasir Shahriar Tonmoy</title>
-
-  <!-- Google Fonts -->
+  
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Caveat:wght@600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Caveat:wght@600;700&family=JetBrains+Mono:wght@300;400;600;800&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Canvas Confetti for memory particle burst -->
+  <!-- Canvas Confetti for Ash and Shards -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
@@ -29,24 +29,12 @@
             sans: ['"Inter"', 'sans-serif'],
           },
           colors: {
-            void: '#05070A',
-            surface: '#0B0F19',
-            elevated: '#121826',
-            border: '#1E293B',
+            desk: '#080A0F',
+            wood: '#111726',
+            paper: '#FFFBEB',
             accent: '#38BDF8',
             crimson: '#E11D48',
-            amberNote: '#FEF3C7',
-            faded: '#64748B'
-          },
-          animation: {
-            'float': 'float 4s ease-in-out infinite',
-            'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-          },
-          keyframes: {
-            float: {
-              '0%, 100%': { transform: 'translateY(0px) rotate(1deg)' },
-              '50%': { transform: 'translateY(-8px) rotate(-1deg)' },
-            }
+            faded: '#475569'
           }
         }
       }
@@ -54,259 +42,262 @@
   </script>
 
   <style>
-    /* Screen Shake on Heartbreak */
-    @keyframes screen-fracture {
-      0% { transform: translate(0, 0) rotate(0deg); filter: contrast(100%); }
-      20% { transform: translate(-8px, 6px) rotate(-1.5deg); filter: contrast(180%) hue-rotate(90deg); }
-      40% { transform: translate(8px, -6px) rotate(1.5deg); }
-      60% { transform: translate(-5px, -4px) rotate(-0.5deg); }
-      80% { transform: translate(5px, 4px) rotate(0.5deg); }
-      100% { transform: translate(0, 0) rotate(0deg); filter: contrast(100%); }
-    }
-    .shake-active {
-      animation: screen-fracture 0.7s ease-in-out;
+    /* Flashlight / Vignette Effect following Cursor */
+    .flashlight-desk {
+      background: radial-gradient(circle 500px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(30, 41, 59, 0.25), rgba(8, 10, 15, 0.98) 75%);
     }
 
-    /* Torn Note Animation */
-    .rip-away {
-      animation: ripAndFly 1.2s forwards cubic-bezier(0.25, 1, 0.5, 1);
-      pointer-events: none;
+    /* Torn Paper Physics */
+    .torn-left {
+      clip-path: polygon(0 0, 52% 0, 48% 20%, 55% 40%, 45% 60%, 53% 80%, 48% 100%, 0 100%);
+      transform: translateX(-40px) rotate(-8deg);
+      opacity: 0.3;
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    @keyframes ripAndFly {
-      0% { transform: scale(1) rotate(-2deg); opacity: 1; filter: blur(0px); }
-      50% { transform: scale(0.9) rotate(-15deg) translateY(40px); opacity: 0.8; }
-      100% { transform: scale(0.4) rotate(45deg) translate(300px, -400px); opacity: 0; filter: blur(8px); }
-    }
-
-    /* Dissolve Rule */
-    .burn-rule {
-      animation: burnOut 0.8s forwards ease-out;
-    }
-    @keyframes burnOut {
-      0% { transform: scale(1); opacity: 1; border-color: #E11D48; }
-      50% { transform: scale(0.95); opacity: 0.5; filter: blur(2px); }
-      100% { transform: scale(0.85); opacity: 0; height: 0; margin: 0; padding: 0; overflow: hidden; }
+    .torn-right {
+      clip-path: polygon(52% 0, 100% 0, 100% 100%, 48% 100%, 53% 80%, 45% 60%, 55% 40%, 48% 20%);
+      transform: translateX(40px) rotate(8deg);
+      opacity: 0.3;
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Glass Fracture Overlay */
-    .cracked-overlay {
-      background: radial-gradient(circle at center, transparent 40%, rgba(225, 29, 72, 0.2) 100%),
-                  repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 1px, transparent 0, transparent 50px);
+    /* Screen Glitch on Rejection */
+    @keyframes violent-impact {
+      0% { transform: scale(1) translate(0, 0); filter: invert(0); }
+      10% { transform: scale(1.03) translate(-15px, 12px) skewX(4deg); filter: invert(0.8) contrast(200%); }
+      30% { transform: scale(0.98) translate(12px, -8px) skewY(-2deg); }
+      50% { transform: scale(1.01) translate(-8px, -6px); }
+      70% { transform: scale(0.99) translate(6px, 4px); filter: contrast(150%); }
+      100% { transform: scale(1) translate(0, 0); filter: invert(0) contrast(100%); }
+    }
+    .impact-active {
+      animation: violent-impact 0.6s ease-in-out forwards;
+    }
+
+    /* Scanlines */
+    .scanlines {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+      background-size: 100% 4px;
     }
   </style>
 </head>
-<body class="bg-void text-slate-300 font-sans selection:bg-crimson selection:text-white min-h-screen overflow-x-hidden relative">
+<body class="bg-desk text-slate-200 font-sans selection:bg-crimson selection:text-white min-h-screen overflow-x-hidden relative scanlines flashlight-desk">
 
-  <!-- Fractured Glass Overlay (Hidden by default, triggered on confession) -->
-  <div id="heartbreak-overlay" class="fixed inset-0 pointer-events-none z-50 transition-opacity duration-1000 opacity-0 cracked-overlay"></div>
+  <!-- Interactive Glass Fracture Canvas -->
+  <canvas id="shatter-canvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
 
-  <!-- Ambient Audio Indicator -->
-  <div class="fixed top-4 right-4 z-40">
-    <button id="sound-btn" class="px-3 py-1.5 rounded-full border border-border bg-surface/80 backdrop-blur-md text-xs font-mono flex items-center gap-2 hover:border-accent transition text-slate-300">
+  <!-- Ambient Sound HUD -->
+  <div class="fixed top-4 right-4 z-40 flex items-center gap-3">
+    <div class="hidden sm:block text-[11px] font-mono text-faded tracking-wider uppercase">IMMERSIVE DESK SIMULATION</div>
+    <button id="sound-btn" class="px-3.5 py-1.5 rounded-full border border-slate-700 bg-wood/80 backdrop-blur-md text-xs font-mono flex items-center gap-2 hover:border-accent transition text-slate-300 shadow-xl">
       <i data-lucide="volume-2" id="sound-icon" class="w-3.5 h-3.5"></i>
-      <span id="sound-status">SOUND: MUTED</span>
+      <span id="sound-status">AUDIO ENGINE: ACTIVE</span>
     </button>
   </div>
 
-  <!-- Stage Container (Acts like an interactive scene director) -->
-  <div class="max-w-3xl mx-auto px-6 py-16 sm:py-24 min-h-screen flex flex-col justify-center">
+  <!-- MAIN SCENARIO / DESK -->
+  <div class="max-w-3xl mx-auto px-6 py-16 sm:py-24 space-y-36 relative">
 
-    <!-- HERO / TITLE -->
-    <header class="text-center space-y-6 mb-20">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface font-mono text-xs text-accent">
+    <!-- HERO INTRODUCTION -->
+    <header class="text-center space-y-6 pt-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-slate-800 bg-wood font-mono text-xs text-accent">
         <span class="w-2 h-2 rounded-full bg-accent animate-ping"></span>
-        AN INTERACTIVE RECORD BY MUNTASIR SHAHRIAR TONMOY
+        PHYSICAL RECORD // TONMOY's SANCTUM (2016–2026)
       </div>
-      <h1 class="font-display text-4xl sm:text-6xl font-bold tracking-tight text-white glow-text leading-tight">
-        The Architecture of an <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-accent via-slate-100 to-crimson">Unspoken Vow</span>
+
+      <h1 class="font-display text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white leading-tight drop-shadow-2xl">
+        The Architecture of an <br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent via-slate-100 to-crimson">Unspoken Vow</span>
       </h1>
-      <p class="font-serif italic text-lg sm:text-xl text-slate-400 max-w-xl mx-auto">
-        "I lived behind an impenetrable fortress. Then came the singular paradox that brought the entire structure down."
+
+      <p class="font-serif italic text-lg sm:text-2xl text-slate-400 max-w-xl mx-auto leading-relaxed">
+        "I was the boy who built an impenetrable fortress. This desk holds the physical wreckage of the only paradox that brought it down."
       </p>
+
+      <div class="pt-6 font-mono text-xs text-faded flex justify-center items-center gap-2 animate-bounce">
+        <i data-lucide="mouse-pointer" class="w-4 h-4"></i>
+        <span>INTERACT WITH THE OBJECTS ON THE DESK BELOW</span>
+      </div>
     </header>
 
-    <!-- CHAPTER 1: THE FORTRESS & UNBREAKABLE RULES -->
-    <section id="act-1" class="space-y-8 mb-24 transition-all duration-700">
-      <div class="flex items-center gap-3 font-mono text-xs text-accent">
-        <span class="px-2 py-0.5 rounded bg-accent/10 border border-accent/30">ACT 01</span>
-        <span>THE FORTRESS & ITS RULES</span>
+    <!-- ACT 1: THE IMPENETRABLE RULES MATRIX -->
+    <section class="space-y-6 border-l-2 border-accent/40 pl-6 relative">
+      <div class="flex items-center gap-2 font-mono text-xs text-accent">
+        <span class="bg-accent/10 px-2 py-0.5 rounded border border-accent/20">ACT 01</span>
+        <span>SECURITY PROTOCOLS & UNYIELDING PRIDE</span>
       </div>
 
-      <div class="font-serif text-lg sm:text-xl text-slate-200 leading-relaxed space-y-4">
-        <p>
-          I have always lived behind high walls. In my family—across both circles—I was the brilliant Class 10 science student, the independent developer building systems from pure logic. But with intellect came an uncompromising, unyielding pride.
-        </p>
-        <p class="text-sm font-mono text-faded">
-          [Click each rule to see the impenetrable parameters I swore by:]
-        </p>
-      </div>
-
-      <!-- Interactive Rigid Rules -->
-      <div class="space-y-4 font-mono text-xs">
-        <div id="rule-card-1" class="p-5 rounded-lg border-2 border-accent/40 bg-surface flex justify-between items-center transition-all">
-          <div>
-            <div class="text-accent font-bold mb-1 flex items-center gap-2"><i data-lucide="lock" class="w-3.5 h-3.5"></i> RULE 01: THE LAW OF SEVERANCE</div>
-            <div class="text-slate-400 text-xs font-sans">Wrong me or talk behind my back, and you are erased forever until you beg with a formal apology.</div>
-          </div>
-          <span class="text-[10px] bg-accent/20 text-accent px-2 py-1 rounded">UNBREAKABLE</span>
-        </div>
-
-        <div id="rule-card-2" class="p-5 rounded-lg border-2 border-accent/40 bg-surface flex justify-between items-center transition-all">
-          <div>
-            <div class="text-accent font-bold mb-1 flex items-center gap-2"><i data-lucide="shield" class="w-3.5 h-3.5"></i> RULE 02: ABSOLUTE EMOTIONAL DETACHMENT</div>
-            <div class="text-slate-400 text-xs font-sans">Proposals and flirtations are rejected instantly. Career first. The heart is locked in cold iron.</div>
-          </div>
-          <span class="text-[10px] bg-accent/20 text-accent px-2 py-1 rounded">UNBREAKABLE</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- CHAPTER 2: THE 2016 STICKY NOTE MEMORY (RIPPABLE) -->
-    <section id="act-2" class="space-y-8 mb-24 relative">
-      <div class="flex items-center gap-3 font-mono text-xs text-amber-300">
-        <span class="px-2 py-0.5 rounded bg-amber-400/10 border border-amber-400/30">ACT 02</span>
-        <span>THE CLASSROOM IN 2016</span>
-      </div>
-
-      <div class="font-serif text-lg sm:text-xl text-slate-200 leading-relaxed">
-        <p>
-          Yet, beneath that fortress sat one paradox: <strong>Fatima Ahmed Shaolin</strong>.
-          We met in 2016, Class 1. She was the only girl allowed past my perimeter. An intense, childish jealousy ruled me—if she even spoke to anyone else, I ran to our mothers to lodge complaints.
-        </p>
-      </div>
-
-      <!-- Physical Sticky Note (Interactive Memory) -->
-      <div class="relative py-4">
-        <div id="childhood-note" class="max-w-md mx-auto bg-amberNote text-neutral-900 p-6 rounded-sm shadow-2xl transform -rotate-1 border border-amber-300 font-hand text-xl sm:text-2xl space-y-3 animate-float relative cursor-pointer">
-          <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-28 h-7 bg-amber-200/80 backdrop-blur-sm transform rotate-1 border-t border-b border-amber-400/40"></div>
-          <div class="font-bold text-lg text-amber-900 font-mono flex items-center justify-between">
-            <span>MEMO // 2016–2018</span>
-            <i data-lucide="pin" class="w-4 h-4 text-amber-800"></i>
-          </div>
-          <p>
-            "Class 1, 2, and 3. We were always together under our mothers' watch. I didn't know the word 'love' yet, but I knew I never wanted her to look away from me."
-          </p>
-          <div class="pt-2 text-xs font-mono text-amber-800 text-right">
-            — Memory intact until end of 2018
-          </div>
-        </div>
-
-        <!-- Rip Button -->
-        <div class="text-center mt-6">
-          <button id="rip-btn" class="px-4 py-2 rounded border border-amber-400/50 bg-amber-400/10 text-amber-300 font-mono text-xs hover:bg-amber-400 hover:text-black transition flex items-center gap-2 mx-auto">
-            <i data-lucide="wind" class="w-4 h-4"></i>
-            <span>[CLICK TO TRIGGER 2018: FAMILY RELOCATES & SEVERS CONNECTION]</span>
-          </button>
-        </div>
-      </div>
-      
-      <!-- Ghost Text after Note Rips -->
-      <div id="rip-aftermath" class="hidden text-center font-mono text-xs text-faded italic py-4 animate-fade-in">
-        [The year 2018 severed everything. No phones, no accounts. The note blew away into darkness for 7 long years.]
-      </div>
-    </section>
-
-    <!-- CHAPTER 3: THE 2025 NOTIFICATION POPUP -->
-    <section id="act-3" class="space-y-8 mb-24">
-      <div class="flex items-center gap-3 font-mono text-xs text-accent">
-        <span class="px-2 py-0.5 rounded bg-accent/10 border border-accent/30">ACT 03</span>
-        <span>EARLY 2025 // THE RECONNECT</span>
-      </div>
-
-      <p class="font-serif text-lg sm:text-xl text-slate-200 leading-relaxed">
-        For years, I believed time had buried that classroom. I didn't know that my heart had quietly frozen in place. Then, in early 2025, an unexpected transmission broke the void:
+      <p class="font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
+        In my family, I was known as the brilliant Class 10 science student and the independent developer who engineered complex systems from logic. With intellect came absolute pride:
       </p>
 
-      <!-- Simulated Interactive Social Request Card -->
-      <div id="request-box" class="p-5 rounded-xl border border-accent/40 bg-surface glow-box max-w-md mx-auto space-y-4">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-accent/20 border border-accent flex items-center justify-center font-display font-bold text-accent">
-              F
-            </div>
-            <div>
-              <div class="font-bold text-sm text-white">Fatima Ahmed Shaolin</div>
-              <div class="text-xs text-faded font-mono">Sent you a friend request</div>
-            </div>
+      <!-- The Two Rigid Vault Locks -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 font-mono">
+        <div class="p-5 rounded-xl border border-slate-700 bg-wood/80 backdrop-blur-sm space-y-2 relative shadow-lg">
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-accent font-bold flex items-center gap-1.5"><i data-lucide="lock" class="w-3.5 h-3.5"></i> RULE 01</span>
+            <span class="text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded text-[10px]">ACTIVE</span>
           </div>
-          <span class="text-[10px] font-mono text-accent bg-accent/10 px-2 py-0.5 rounded">NEW SIGNAL</span>
+          <div class="text-sm font-bold text-white">The Rule of Severance</div>
+          <p class="text-xs text-slate-400 font-sans leading-normal">
+            If a friend wronged me or talked behind my back, I cut them off entirely until they came with a formal apology.
+          </p>
         </div>
-        <button id="accept-req-btn" class="w-full py-2.5 rounded bg-accent text-void font-mono font-bold text-xs uppercase tracking-wider hover:bg-white transition flex items-center justify-center gap-2">
-          <i data-lucide="check" class="w-4 h-4"></i> Accept Request & Reignite Memory
-        </button>
-      </div>
 
-      <!-- Mother's Mandate (Revealed after clicking accept) -->
-      <div id="mother-dialogue" class="hidden p-6 rounded-lg border-l-4 border-accent bg-surface/50 font-serif italic text-lg text-slate-200 space-y-3">
-        <p>"I have seen many girls, Tonmoy. I don't trust a stranger to enter this house as my daughter-in-law. I will make a decision for your future that you cannot deny—I want Shaolin to be your wife."</p>
-        <div class="text-xs font-mono text-accent not-italic">— My Mother (2026, Noapra & Khulna)</div>
+        <div class="p-5 rounded-xl border border-slate-700 bg-wood/80 backdrop-blur-sm space-y-2 relative shadow-lg">
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-accent font-bold flex items-center gap-1.5"><i data-lucide="shield" class="w-3.5 h-3.5"></i> RULE 02</span>
+            <span class="text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded text-[10px]">ACTIVE</span>
+          </div>
+          <div class="text-sm font-bold text-white">Emotional Detachment</div>
+          <p class="text-xs text-slate-400 font-sans leading-normal">
+            Ignored all proposals and attention completely. Career first. The heart remains strictly locked away.
+          </p>
+        </div>
       </div>
     </section>
 
-    <!-- CHAPTER 4: THE CONFESSION & THE CRITICAL HEARTBREAK -->
-    <section id="act-4" class="space-y-8 mb-24">
-      <div class="flex items-center gap-3 font-mono text-xs text-crimson">
-        <span class="px-2 py-0.5 rounded bg-crimson/10 border border-crimson/30">ACT 04</span>
-        <span>THE SURRENDER & THE FRACTURE</span>
+    <!-- ACT 2: THE 2016 TORN PAPER (PHYSICAL INTERACTION) -->
+    <section class="space-y-6 border-l-2 border-amber-400/40 pl-6 relative">
+      <div class="flex items-center gap-2 font-mono text-xs text-amber-300">
+        <span class="bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20">ACT 02</span>
+        <span>THE CLASSROOM IN 2016 // CHILDHOOD BOND</span>
       </div>
 
-      <div class="font-serif text-lg sm:text-xl text-slate-200 leading-relaxed space-y-4">
-        <p>
-          I never wanted casual romance. I could have said yes to dozens of proposals. I wanted to marry her. Listening to my family’s unanimous validation at Noapra, I made the decision to break every wall I had ever built.
-        </p>
-        <p>
-          I contacted her closest friend. When asked if I truly loved her, I discarded my pride: <strong>"Yes. I love her."</strong>
-        </p>
-        <p class="text-crimson font-mono text-sm">
-          Then the strike landed: Shaolin was deeply in love with someone else—a senior named Roktim.
-        </p>
-      </div>
+      <p class="font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
+        Yet beneath that calculated fortress sat the singular paradox: <strong class="text-white">Fatima Ahmed Shaolin</strong>. We met in Class 1 (2016). She was the only girl allowed past my perimeter. Even as an eight-year-old, I felt a sharp, possessive jealousy whenever she spoke to anyone else.
+      </p>
 
-      <!-- The Interactive Begging & Heartbreak Trigger -->
-      <div class="p-6 rounded-xl border border-crimson/50 bg-void space-y-6 font-mono text-xs text-slate-300">
-        <div class="text-crimson font-bold uppercase tracking-wider flex items-center gap-2">
-          <i data-lucide="heart-crack" class="w-4 h-4 text-crimson"></i>
-          CRITICAL MOMENT: STRIPPING THE EGO
-        </div>
-
-        <div class="space-y-3 font-serif text-base text-slate-200 italic">
-          <div class="p-3 bg-surface rounded border-l-2 border-accent">
-            "I have loved you for years without touching you, without seeing you, without demanding your presence. My love has been entirely pure. Please, give me just one chance."
-          </div>
-          <div class="p-3 bg-surface rounded border-l-2 border-slate-500">
-            "I respect your love, Tonmoy. But my heart belongs to someone else. Even if you were the best person in the world, the person I love remains the best to me at all costs."
+      <!-- Physical Paper Memory on the Desk -->
+      <div class="py-6 text-center">
+        <div id="physical-paper-wrap" class="relative inline-block select-none cursor-grab active:cursor-grabbing transition-transform">
+          <!-- Main Intact Note -->
+          <div id="memory-paper" class="w-80 sm:w-96 bg-paper text-slate-900 p-6 rounded shadow-2xl border-t-8 border-amber-300 font-hand text-2xl transform -rotate-1 transition-all duration-500 space-y-4">
+            <div class="flex justify-between items-center text-xs font-mono text-slate-500 uppercase tracking-widest">
+              <span>CLASSROOM LOG: 2016–2018</span>
+              <i data-lucide="bookmark" class="w-4 h-4 text-amber-600"></i>
+            </div>
+            <p class="leading-relaxed">
+              "We stayed inseparable through Class 2 and 3. I didn't know what love was, but my world was centered on her presence."
+            </p>
+            <div class="text-[11px] font-mono text-amber-900 text-right pt-2">
+              [Taped down in 2016 — Intact until 2018 move]
+            </div>
           </div>
         </div>
 
-        <button id="break-heart-btn" class="w-full py-3 rounded border border-crimson bg-crimson/20 hover:bg-crimson hover:text-white transition-all text-xs font-mono font-bold uppercase tracking-widest text-crimson flex items-center justify-center gap-2">
-          <i data-lucide="hammer" class="w-4 h-4"></i>
-          [CLICK TO WITNESS THE COMPLETE COLLAPSE OF PRIDE]
+        <!-- The Physical Tear Button -->
+        <div class="mt-6">
+          <button id="tear-memory-btn" class="px-5 py-2.5 rounded-lg border border-amber-400/50 bg-amber-400/10 text-amber-300 font-mono text-xs hover:bg-amber-400 hover:text-black transition-all flex items-center gap-2 mx-auto shadow-lg">
+            <i data-lucide="scissors" class="w-4 h-4"></i>
+            <span>[TEAR NOTE & TRIGGER 2018 RELOCATION SEVERANCE]</span>
+          </button>
+        </div>
+
+        <div id="tear-status" class="hidden font-mono text-xs text-faded italic pt-4">
+          [Paper torn in half. Complete silence endured from late 2018 to early 2025. 7 years lost to the void.]
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT 3: THE 2025 SMARTPHONE ALERT (SLIDE TO UNLOCK) -->
+    <section class="space-y-6 border-l-2 border-accent pl-6 relative">
+      <div class="flex items-center gap-2 font-mono text-xs text-accent">
+        <span class="bg-accent/10 px-2 py-0.5 rounded border border-accent/20">ACT 03</span>
+        <span>EARLY 2025 // THE SIGNAL AWAKENS</span>
+      </div>
+
+      <p class="font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
+        After seven years of utter silence, a vibration echoed on my desk in early 2025. She had remembered me.
+      </p>
+
+      <!-- Simulated Realistic Mobile Notification Device -->
+      <div class="max-w-sm mx-auto bg-slate-950 p-4 rounded-3xl border-2 border-slate-700 shadow-2xl space-y-4">
+        <div class="flex justify-between items-center text-[10px] font-mono text-slate-500 px-2">
+          <span>02:14 AM</span>
+          <div class="flex items-center gap-1"><i data-lucide="wifi" class="w-3 h-3"></i><i data-lucide="battery" class="w-3 h-3"></i></div>
+        </div>
+
+        <div id="phone-notification" class="p-4 rounded-2xl bg-wood border border-accent/30 flex items-start gap-3 shadow-lg">
+          <div class="w-10 h-10 rounded-full bg-accent/20 border border-accent flex items-center justify-center font-display font-bold text-accent shrink-0">
+            S
+          </div>
+          <div class="space-y-1 text-left flex-1">
+            <div class="text-xs font-bold text-white flex justify-between">
+              <span>Shaolin</span>
+              <span class="text-[10px] font-mono text-accent">Facebook</span>
+            </div>
+            <p class="text-xs text-slate-300 font-sans">Sent you a friend request.</p>
+          </div>
+        </div>
+
+        <button id="unlock-msg-btn" class="w-full py-2.5 rounded-xl bg-accent text-slate-950 font-mono font-bold text-xs uppercase tracking-wider hover:bg-white transition flex items-center justify-center gap-2">
+          <i data-lucide="check" class="w-4 h-4"></i> Accept & Unlock 2026 Mandate
+        </button>
+      </div>
+
+      <!-- Mother's Mandate Dialogue Card -->
+      <div id="mother-mandate" class="hidden p-6 rounded-xl border border-accent/40 bg-wood/90 font-serif italic text-lg text-slate-100 space-y-3 shadow-2xl">
+        <p>"I have seen many girls, Tonmoy. I don't trust a stranger to enter this house as my daughter-in-law. I want Shaolin to be your wife."</p>
+        <div class="text-xs font-mono text-accent not-italic flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Family approval granted at Noapra, Jashore (2026)
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT 4: THE CONFESSION & GLASS BREAK CRASH -->
+    <section class="space-y-6 border-l-2 border-crimson pl-6 relative">
+      <div class="flex items-center gap-2 font-mono text-xs text-crimson">
+        <span class="bg-crimson/10 px-2 py-0.5 rounded border border-crimson/20">ACT 04</span>
+        <span>THE COLLAPSE OF PRIDE // THE REJECTION</span>
+      </div>
+
+      <p class="font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
+        I stripped away my ego. I asked her friend, then reached out to Shaolin directly:
+      </p>
+
+      <!-- Live Typing Terminal Box -->
+      <div class="p-6 rounded-2xl border-2 border-crimson/40 bg-black/90 space-y-4 font-mono text-xs">
+        <div class="flex items-center justify-between text-crimson uppercase tracking-wider text-[11px]">
+          <span class="flex items-center gap-1.5"><i data-lucide="terminal" class="w-3.5 h-3.5"></i> UNFILTERED TRANSMISSION</span>
+          <span>RECIPIENT: SHAOLIN</span>
+        </div>
+
+        <div class="p-4 rounded-xl bg-wood border-l-4 border-accent text-slate-200 font-serif text-base italic">
+          "I have loved you for years without touching you, without seeing you, without demanding your presence. My love has been entirely pure. Please, give me just one chance."
+        </div>
+
+        <div class="p-4 rounded-xl bg-wood border-l-4 border-slate-600 text-slate-200 font-serif text-base italic">
+          "I respect your love, Tonmoy. But my heart belongs to someone else [Roktim]. Even if you were the best person in the world, the person I love remains the best to me at all costs."
+        </div>
+
+        <!-- The Physical Heartbreak Strike Button -->
+        <button id="break-glass-btn" class="w-full py-4 rounded-xl bg-crimson text-white font-mono font-bold text-xs uppercase tracking-widest hover:bg-rose-600 transition-all flex items-center justify-center gap-2 shadow-2xl active:scale-95">
+          <i data-lucide="heart-crack" class="w-4 h-4"></i>
+          [CLICK TO PLEAD, DESTROY EGO & SHATTER REALITY]
         </button>
       </div>
     </section>
 
-    <!-- CHAPTER 5: THE NUMBED REALITY & THE FINAL MONUMENT -->
-    <section id="act-5" class="space-y-8 mb-24 transition-opacity duration-1000 opacity-60">
-      <div class="flex items-center gap-3 font-mono text-xs text-faded">
-        <span class="px-2 py-0.5 rounded bg-surface border border-border">ACT 05</span>
-        <span>THE NUMB REALITY & THE FINAL CODE</span>
+    <!-- ACT 5: THE COLD NUMB EPILOGUE -->
+    <section id="final-monument" class="space-y-8 border-l-2 border-slate-700 pl-6 relative transition-opacity duration-1000 opacity-40">
+      <div class="flex items-center gap-2 font-mono text-xs text-faded">
+        <span class="bg-wood px-2 py-0.5 rounded border border-slate-800">ACT 05</span>
+        <span>THE NUMBED REALITY</span>
       </div>
 
-      <div class="font-serif text-lg sm:text-xl text-slate-300 leading-relaxed space-y-6">
+      <div class="font-serif text-lg sm:text-xl text-slate-300 leading-relaxed space-y-4">
         <p>
-          I—the boy who would cut off lifelong friends until they begged for forgiveness—begged her. And her unwavering, polite loyalty to Roktim was the exact wall that shut me out forever.
+          I—the boy who would cut off lifelong friends until they begged for forgiveness—begged her. And with unwavering loyalty to the person she loved, she shut the door forever.
         </p>
         <p>
-          The machinery broke. The science focus and intricate lines of code slipped through my fingers. But the ego died with it: insults, disrespect, and words behind my back now mean nothing. The pain neutralized into pure numbness.
-        </p>
-        <p>
-          Friends tell me: <em>"Tonmoy, you are 18. You're brilliant, you have a massive future, you will find someone better."</em> They don't understand. If I wanted options, I would have taken them. I never wanted an upgrade. I only ever wanted Shaolin.
+          The focus that powered my software and science masteries broke. But in its place came a stranger peace: <strong>The complete death of ego</strong>. If someone insults me now, it registers as nothing. I am hollowed out.
         </p>
       </div>
 
-      <!-- Sealed Monument -->
-      <div class="p-8 sm:p-12 rounded-2xl border border-border bg-gradient-to-b from-surface/80 to-void text-center space-y-6 relative overflow-hidden">
-        <div class="font-mono text-xs tracking-widest text-accent uppercase">FINAL SEALED ARCHIVE</div>
+      <!-- Sealed Monument Block -->
+      <div class="p-8 sm:p-12 rounded-2xl border border-slate-800 bg-gradient-to-b from-wood to-desk text-center space-y-6 shadow-2xl relative overflow-hidden">
+        <div class="font-mono text-xs tracking-widest text-accent uppercase">EPILOGUE // THE UNBREAKABLE MEMORY</div>
         <p class="font-serif italic text-2xl sm:text-3xl text-white max-w-xl mx-auto leading-relaxed">
           "I gave the absolute purest, most humble version of myself to the only person who ever mattered."
         </p>
@@ -318,132 +309,172 @@
 
   </div>
 
-  <!-- Interactive Logic & Sound Synthesis -->
+  <!-- Interactive JavaScript Engine -->
   <script>
     lucide.createIcons();
 
-    // Sound Synthesizer via Web Audio API
+    // 1. Realistic Mouse Flashlight Lighting
+    window.addEventListener('mousemove', (e) => {
+      document.body.style.setProperty('--mouse-x', `${e.clientX}px`);
+      document.body.style.setProperty('--mouse-y', `${e.clientY}px`);
+    });
+
+    // 2. Physical Web Audio Acoustic Synthesizer
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
-    let isMuted = true;
-    const soundBtn = document.getElementById('sound-btn');
-    const soundStatus = document.getElementById('sound-status');
-    const soundIcon = document.getElementById('sound-icon');
 
-    function initAudio() {
+    function getAudio() {
       if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        audioCtx = new AudioContext();
       }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
     }
 
-    function playTone(freq, type, duration, gainVol = 0.1) {
-      if (isMuted || !audioCtx) return;
-      try {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(gainVol, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-      } catch (e) {}
+    // Play synthesized glass crack / tear sounds
+    function playSfx(type) {
+      const ctx = getAudio();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      if (type === 'tear') {
+        // High friction paper tear
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(400, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.35);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+      } else if (type === 'glass') {
+        // High pitch crash & sub bass drop
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(800, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.8);
+        gain.gain.setValueAtTime(0.4, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
+      } else if (type === 'chime') {
+        // Notification chime
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+        osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1); // A5
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+      }
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.8);
     }
 
-    soundBtn.addEventListener('click', () => {
-      initAudio();
-      isMuted = !isMuted;
-      if (!isMuted) {
-        soundStatus.textContent = "SOUND: ON";
-        soundBtn.classList.add('border-accent', 'text-accent');
-        playTone(440, 'sine', 0.5, 0.05);
-      } else {
-        soundStatus.textContent = "SOUND: MUTED";
-        soundBtn.classList.remove('border-accent', 'text-accent');
-      }
-    });
+    // 3. Physical Paper Tear Interaction
+    const tearBtn = document.getElementById('tear-memory-btn');
+    const paper = document.getElementById('memory-paper');
+    const tearStatus = document.getElementById('tear-status');
 
-    // 1. Ripping Childhood Sticky Note
-    const ripBtn = document.getElementById('rip-btn');
-    const note = document.getElementById('childhood-note');
-    const ripAftermath = document.getElementById('rip-aftermath');
+    tearBtn.addEventListener('click', () => {
+      playSfx('tear');
 
-    ripBtn.addEventListener('click', () => {
-      initAudio();
-      playTone(150, 'sawtooth', 0.6, 0.15); // Tear sound
-      note.classList.add('rip-away');
-      ripBtn.style.display = 'none';
-
-      // Memory particles blowing away
-      confetti({
-        particleCount: 50,
-        spread: 80,
-        origin: { y: 0.4 },
-        colors: ['#FEF3C7', '#FDE68A', '#78350F']
-      });
-
-      setTimeout(() => {
-        note.style.display = 'none';
-        ripAftermath.classList.remove('hidden');
-      }, 1100);
-    });
-
-    // 2. Accept Facebook Request Trigger
-    const acceptReqBtn = document.getElementById('accept-req-btn');
-    const requestBox = document.getElementById('request-box');
-    const motherDialogue = document.getElementById('mother-dialogue');
-
-    acceptReqBtn.addEventListener('click', () => {
-      initAudio();
-      playTone(587.33, 'triangle', 0.4, 0.1); // High D note (Notification chime)
-      requestBox.innerHTML = `
-        <div class="text-center py-3 text-accent font-mono text-xs flex items-center justify-center gap-2">
-          <i data-lucide="check-circle" class="w-4 h-4"></i> CONNECTION ACCEPTED — MEMORY STREAM REOPENED (2025)
+      // Visual paper rip with dual segments
+      paper.innerHTML = `
+        <div class="flex justify-between items-center text-xs font-mono text-slate-500 uppercase tracking-widest mb-2">
+          <span>CLASSROOM LOG: 2016–2018</span>
+          <span class="text-crimson font-bold">SEVERED</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-sm text-slate-600 font-mono">
+          <div class="torn-left p-2 border-r border-dashed border-red-500">"We stayed inseparable... my world was centered..."</div>
+          <div class="torn-right p-2">"...silence began. 7 years into darkness."</div>
         </div>
       `;
-      lucide.createIcons();
-      motherDialogue.classList.remove('hidden');
-    });
 
-    // 3. Heartbreak / Shatter Pride Trigger
-    const breakHeartBtn = document.getElementById('break-heart-btn');
-    const heartbreakOverlay = document.getElementById('heartbreak-overlay');
-    const ruleCard1 = document.getElementById('rule-card-1');
-    const ruleCard2 = document.getElementById('rule-card-2');
-    const act5 = document.getElementById('act-5');
-
-    breakHeartBtn.addEventListener('click', () => {
-      initAudio();
-      // Low jarring chord
-      playTone(90, 'sawtooth', 1.2, 0.25);
-      playTone(65, 'square', 1.5, 0.2);
-
-      // Screen Fracture Shake
-      document.body.classList.add('shake-active');
-      heartbreakOverlay.style.opacity = '1';
-
-      // Burn Rules to Ashes
-      ruleCard1.classList.add('burn-rule');
-      ruleCard2.classList.add('burn-rule');
-
-      // Heartbreak particles (Crimson and Ash)
       confetti({
-        particleCount: 100,
-        spread: 100,
-        origin: { y: 0.6 },
-        colors: ['#E11D48', '#881337', '#0F172A']
+        particleCount: 40,
+        spread: 60,
+        origin: { y: 0.45 },
+        colors: ['#FFFBEB', '#FDE68A', '#D97706']
       });
 
-      breakHeartBtn.innerHTML = `<span class="text-crimson">WALLS CRUMBLED // EGO DESTROYED</span>`;
-      breakHeartBtn.disabled = true;
+      tearBtn.style.display = 'none';
+      tearStatus.classList.remove('hidden');
+    });
+
+    // 4. Smartphone Unlock Action
+    const unlockBtn = document.getElementById('unlock-msg-btn');
+    const motherMandate = document.getElementById('mother-mandate');
+
+    unlockBtn.addEventListener('click', () => {
+      playSfx('chime');
+      unlockBtn.innerHTML = `<span class="text-slate-900 font-bold">SIGNAL RECEIVED // ARCHIVE LINKED</span>`;
+      unlockBtn.disabled = true;
+      motherMandate.classList.remove('hidden');
+    });
+
+    // 5. Canvas Glass Shatter & Reality Collapse Simulation
+    const breakGlassBtn = document.getElementById('break-glass-btn');
+    const canvas = document.getElementById('shatter-canvas');
+    const ctx = canvas.getContext('2d');
+    const finalAct = document.getElementById('final-monument');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Draw realistic glass fractures
+    function drawCracks(startX, startY) {
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+      ctx.lineWidth = 1.5;
+      ctx.shadowColor = 'rgba(56, 189, 248, 0.8)';
+      ctx.shadowBlur = 8;
+
+      const numLines = 24;
+      for (let i = 0; i < numLines; i++) {
+        let angle = (i / numLines) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+        let dist = 100 + Math.random() * 400;
+        
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        
+        let curX = startX;
+        let curY = startY;
+        for (let step = 0; step < 5; step++) {
+          curX += Math.cos(angle) * (dist / 5) + (Math.random() - 0.5) * 30;
+          curY += Math.sin(angle) * (dist / 5) + (Math.random() - 0.5) * 30;
+          ctx.lineTo(curX, curY);
+        }
+        ctx.stroke();
+      }
+    }
+
+    breakGlassBtn.addEventListener('click', (e) => {
+      playSfx('glass');
+      document.body.classList.add('impact-active');
+
+      const rect = breakGlassBtn.getBoundingClientRect();
+      const clickX = rect.left + rect.width / 2;
+      const clickY = rect.top + rect.height / 2;
+
+      drawCracks(clickX, clickY);
+
+      confetti({
+        particleCount: 150,
+        spread: 120,
+        origin: { y: 0.65 },
+        colors: ['#E11D48', '#38BDF8', '#FFFFFF']
+      });
+
+      breakGlassBtn.innerHTML = `WALLS BROKEN // PRIDE ERADICATED`;
+      breakGlassBtn.disabled = true;
 
       setTimeout(() => {
-        document.body.classList.remove('shake-active');
-        act5.classList.remove('opacity-60');
-        act5.classList.add('opacity-100');
-        act5.scrollIntoView({ behavior: 'smooth' });
-      }, 700);
+        document.body.classList.remove('impact-active');
+        finalAct.classList.remove('opacity-40');
+        finalAct.classList.add('opacity-100');
+        finalAct.scrollIntoView({ behavior: 'smooth' });
+      }, 600);
     });
   </script>
 </body>
