@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Architecture of an Unspoken Vow — Muntasir Shahriar Tonmoy</title>
-  
-  <!-- Fonts -->
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;1,300&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Caveat:wght@600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti for memory particle burst -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
     tailwind.config = {
@@ -22,18 +23,30 @@
         extend: {
           fontFamily: {
             mono: ['"JetBrains Mono"', 'monospace'],
-            serif: ['"Playfair Display"', 'serif'],
+            serif: ['"EB Garamond"', 'serif'],
+            hand: ['"Caveat"', 'cursive'],
             display: ['"Cinzel"', 'serif'],
             sans: ['"Inter"', 'sans-serif'],
           },
           colors: {
-            void: '#07090E',
-            surface: '#0E131F',
-            elevated: '#171F33',
-            border: '#242F4D',
+            void: '#05070A',
+            surface: '#0B0F19',
+            elevated: '#121826',
+            border: '#1E293B',
             accent: '#38BDF8',
             crimson: '#E11D48',
+            amberNote: '#FEF3C7',
             faded: '#64748B'
+          },
+          animation: {
+            'float': 'float 4s ease-in-out infinite',
+            'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(1deg)' },
+              '50%': { transform: 'translateY(-8px) rotate(-1deg)' },
+            }
           }
         }
       }
@@ -41,452 +54,396 @@
   </script>
 
   <style>
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
+    /* Screen Shake on Heartbreak */
+    @keyframes screen-fracture {
+      0% { transform: translate(0, 0) rotate(0deg); filter: contrast(100%); }
+      20% { transform: translate(-8px, 6px) rotate(-1.5deg); filter: contrast(180%) hue-rotate(90deg); }
+      40% { transform: translate(8px, -6px) rotate(1.5deg); }
+      60% { transform: translate(-5px, -4px) rotate(-0.5deg); }
+      80% { transform: translate(5px, 4px) rotate(0.5deg); }
+      100% { transform: translate(0, 0) rotate(0deg); filter: contrast(100%); }
     }
-    ::-webkit-scrollbar-track {
-      background: #07090E;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #242F4D;
-      border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #38BDF8;
+    .shake-active {
+      animation: screen-fracture 0.7s ease-in-out;
     }
 
-    .glow-text {
-      text-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+    /* Torn Note Animation */
+    .rip-away {
+      animation: ripAndFly 1.2s forwards cubic-bezier(0.25, 1, 0.5, 1);
+      pointer-events: none;
     }
-    
-    .glow-box {
-      box-shadow: 0 0 35px -5px rgba(56, 189, 248, 0.15);
-    }
-
-    .crt-grid {
-      background-size: 40px 40px;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    @keyframes ripAndFly {
+      0% { transform: scale(1) rotate(-2deg); opacity: 1; filter: blur(0px); }
+      50% { transform: scale(0.9) rotate(-15deg) translateY(40px); opacity: 0.8; }
+      100% { transform: scale(0.4) rotate(45deg) translate(300px, -400px); opacity: 0; filter: blur(8px); }
     }
 
-    .system-log-view .prose-content {
-      display: none;
+    /* Dissolve Rule */
+    .burn-rule {
+      animation: burnOut 0.8s forwards ease-out;
     }
-    .system-log-view .log-content {
-      display: block;
+    @keyframes burnOut {
+      0% { transform: scale(1); opacity: 1; border-color: #E11D48; }
+      50% { transform: scale(0.95); opacity: 0.5; filter: blur(2px); }
+      100% { transform: scale(0.85); opacity: 0; height: 0; margin: 0; padding: 0; overflow: hidden; }
     }
-    .log-content {
-      display: none;
+
+    /* Glass Fracture Overlay */
+    .cracked-overlay {
+      background: radial-gradient(circle at center, transparent 40%, rgba(225, 29, 72, 0.2) 100%),
+                  repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 1px, transparent 0, transparent 50px);
     }
   </style>
 </head>
-<body class="bg-void text-slate-300 font-sans antialiased selection:bg-accent selection:text-void min-h-screen crt-grid relative overflow-x-hidden">
+<body class="bg-void text-slate-300 font-sans selection:bg-crimson selection:text-white min-h-screen overflow-x-hidden relative">
 
-  <!-- Progress Bar -->
-  <div id="scroll-progress" class="fixed top-0 left-0 h-[2px] bg-accent z-50 transition-all duration-75 w-0"></div>
+  <!-- Fractured Glass Overlay (Hidden by default, triggered on confession) -->
+  <div id="heartbreak-overlay" class="fixed inset-0 pointer-events-none z-50 transition-opacity duration-1000 opacity-0 cracked-overlay"></div>
 
-  <!-- HUD Control Bar -->
-  <header class="fixed top-0 right-0 left-0 z-40 bg-void/80 backdrop-blur-md border-b border-border/50 px-6 py-4 flex items-center justify-between text-xs font-mono">
-    <div class="flex items-center space-x-3">
-      <span class="inline-block w-2 h-2 rounded-full bg-accent animate-pulse"></span>
-      <span class="tracking-widest uppercase text-slate-400">ARCHIVE // MEMOIR_MST_2026</span>
-    </div>
-    
-    <div class="flex items-center space-x-4">
-      <!-- Mode Switcher -->
-      <button id="view-toggle" class="flex items-center space-x-2 px-3 py-1.5 rounded border border-border bg-surface hover:border-accent transition-colors text-slate-300">
-        <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
-        <span id="view-toggle-text">VIEW: LITERARY</span>
-      </button>
+  <!-- Ambient Audio Indicator -->
+  <div class="fixed top-4 right-4 z-40">
+    <button id="sound-btn" class="px-3 py-1.5 rounded-full border border-border bg-surface/80 backdrop-blur-md text-xs font-mono flex items-center gap-2 hover:border-accent transition text-slate-300">
+      <i data-lucide="volume-2" id="sound-icon" class="w-3.5 h-3.5"></i>
+      <span id="sound-status">SOUND: MUTED</span>
+    </button>
+  </div>
 
-      <!-- Ambient Audio Switcher -->
-      <button id="audio-toggle" class="flex items-center space-x-2 px-3 py-1.5 rounded border border-border bg-surface hover:border-accent transition-colors text-slate-300">
-        <i data-lucide="volume-x" id="audio-icon" class="w-3.5 h-3.5"></i>
-        <span id="audio-text">ATMOSPHERE: OFF</span>
-      </button>
-    </div>
-  </header>
+  <!-- Stage Container (Acts like an interactive scene director) -->
+  <div class="max-w-3xl mx-auto px-6 py-16 sm:py-24 min-h-screen flex flex-col justify-center">
 
-  <!-- Hero / Introduction -->
-  <section class="min-h-screen flex flex-col justify-center items-center px-6 relative pt-20">
-    <div class="max-w-4xl w-full text-center space-y-8">
-      
-      <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-border bg-surface/80 text-xs font-mono text-accent">
-        <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
-        <span>SYSTEM CLASSIFICATION: CONFIDENTIAL RECORD</span>
+    <!-- HERO / TITLE -->
+    <header class="text-center space-y-6 mb-20">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface font-mono text-xs text-accent">
+        <span class="w-2 h-2 rounded-full bg-accent animate-ping"></span>
+        AN INTERACTIVE RECORD BY MUNTASIR SHAHRIAR TONMOY
+      </div>
+      <h1 class="font-display text-4xl sm:text-6xl font-bold tracking-tight text-white glow-text leading-tight">
+        The Architecture of an <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-accent via-slate-100 to-crimson">Unspoken Vow</span>
+      </h1>
+      <p class="font-serif italic text-lg sm:text-xl text-slate-400 max-w-xl mx-auto">
+        "I lived behind an impenetrable fortress. Then came the singular paradox that brought the entire structure down."
+      </p>
+    </header>
+
+    <!-- CHAPTER 1: THE FORTRESS & UNBREAKABLE RULES -->
+    <section id="act-1" class="space-y-8 mb-24 transition-all duration-700">
+      <div class="flex items-center gap-3 font-mono text-xs text-accent">
+        <span class="px-2 py-0.5 rounded bg-accent/10 border border-accent/30">ACT 01</span>
+        <span>THE FORTRESS & ITS RULES</span>
       </div>
 
-      <h1 class="font-display text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white glow-text leading-tight">
-        The Architecture of an <br>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent via-slate-200 to-accent">Unspoken Vow</span>
-      </h1>
+      <div class="font-serif text-lg sm:text-xl text-slate-200 leading-relaxed space-y-4">
+        <p>
+          I have always lived behind high walls. In my family—across both circles—I was the brilliant Class 10 science student, the independent developer building systems from pure logic. But with intellect came an uncompromising, unyielding pride.
+        </p>
+        <p class="text-sm font-mono text-faded">
+          [Click each rule to see the impenetrable parameters I swore by:]
+        </p>
+      </div>
 
-      <p class="font-mono text-sm tracking-widest uppercase text-faded">
-        A Memoir in First Person — By Muntasir Shahriar Tonmoy
+      <!-- Interactive Rigid Rules -->
+      <div class="space-y-4 font-mono text-xs">
+        <div id="rule-card-1" class="p-5 rounded-lg border-2 border-accent/40 bg-surface flex justify-between items-center transition-all">
+          <div>
+            <div class="text-accent font-bold mb-1 flex items-center gap-2"><i data-lucide="lock" class="w-3.5 h-3.5"></i> RULE 01: THE LAW OF SEVERANCE</div>
+            <div class="text-slate-400 text-xs font-sans">Wrong me or talk behind my back, and you are erased forever until you beg with a formal apology.</div>
+          </div>
+          <span class="text-[10px] bg-accent/20 text-accent px-2 py-1 rounded">UNBREAKABLE</span>
+        </div>
+
+        <div id="rule-card-2" class="p-5 rounded-lg border-2 border-accent/40 bg-surface flex justify-between items-center transition-all">
+          <div>
+            <div class="text-accent font-bold mb-1 flex items-center gap-2"><i data-lucide="shield" class="w-3.5 h-3.5"></i> RULE 02: ABSOLUTE EMOTIONAL DETACHMENT</div>
+            <div class="text-slate-400 text-xs font-sans">Proposals and flirtations are rejected instantly. Career first. The heart is locked in cold iron.</div>
+          </div>
+          <span class="text-[10px] bg-accent/20 text-accent px-2 py-1 rounded">UNBREAKABLE</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 2: THE 2016 STICKY NOTE MEMORY (RIPPABLE) -->
+    <section id="act-2" class="space-y-8 mb-24 relative">
+      <div class="flex items-center gap-3 font-mono text-xs text-amber-300">
+        <span class="px-2 py-0.5 rounded bg-amber-400/10 border border-amber-400/30">ACT 02</span>
+        <span>THE CLASSROOM IN 2016</span>
+      </div>
+
+      <div class="font-serif text-lg sm:text-xl text-slate-200 leading-relaxed">
+        <p>
+          Yet, beneath that fortress sat one paradox: <strong>Fatima Ahmed Shaolin</strong>.
+          We met in 2016, Class 1. She was the only girl allowed past my perimeter. An intense, childish jealousy ruled me—if she even spoke to anyone else, I ran to our mothers to lodge complaints.
+        </p>
+      </div>
+
+      <!-- Physical Sticky Note (Interactive Memory) -->
+      <div class="relative py-4">
+        <div id="childhood-note" class="max-w-md mx-auto bg-amberNote text-neutral-900 p-6 rounded-sm shadow-2xl transform -rotate-1 border border-amber-300 font-hand text-xl sm:text-2xl space-y-3 animate-float relative cursor-pointer">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-28 h-7 bg-amber-200/80 backdrop-blur-sm transform rotate-1 border-t border-b border-amber-400/40"></div>
+          <div class="font-bold text-lg text-amber-900 font-mono flex items-center justify-between">
+            <span>MEMO // 2016–2018</span>
+            <i data-lucide="pin" class="w-4 h-4 text-amber-800"></i>
+          </div>
+          <p>
+            "Class 1, 2, and 3. We were always together under our mothers' watch. I didn't know the word 'love' yet, but I knew I never wanted her to look away from me."
+          </p>
+          <div class="pt-2 text-xs font-mono text-amber-800 text-right">
+            — Memory intact until end of 2018
+          </div>
+        </div>
+
+        <!-- Rip Button -->
+        <div class="text-center mt-6">
+          <button id="rip-btn" class="px-4 py-2 rounded border border-amber-400/50 bg-amber-400/10 text-amber-300 font-mono text-xs hover:bg-amber-400 hover:text-black transition flex items-center gap-2 mx-auto">
+            <i data-lucide="wind" class="w-4 h-4"></i>
+            <span>[CLICK TO TRIGGER 2018: FAMILY RELOCATES & SEVERS CONNECTION]</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Ghost Text after Note Rips -->
+      <div id="rip-aftermath" class="hidden text-center font-mono text-xs text-faded italic py-4 animate-fade-in">
+        [The year 2018 severed everything. No phones, no accounts. The note blew away into darkness for 7 long years.]
+      </div>
+    </section>
+
+    <!-- CHAPTER 3: THE 2025 NOTIFICATION POPUP -->
+    <section id="act-3" class="space-y-8 mb-24">
+      <div class="flex items-center gap-3 font-mono text-xs text-accent">
+        <span class="px-2 py-0.5 rounded bg-accent/10 border border-accent/30">ACT 03</span>
+        <span>EARLY 2025 // THE RECONNECT</span>
+      </div>
+
+      <p class="font-serif text-lg sm:text-xl text-slate-200 leading-relaxed">
+        For years, I believed time had buried that classroom. I didn't know that my heart had quietly frozen in place. Then, in early 2025, an unexpected transmission broke the void:
       </p>
 
-      <div class="max-w-xl mx-auto pt-6 text-slate-400 font-serif italic text-lg leading-relaxed">
-        "I signed a strict contract with my ambition: Career first. The heart remains strictly locked away. Yet, beneath that calculated fortress sat the singular paradox of my life."
-      </div>
-
-      <div class="pt-8">
-        <a href="#part-1" class="inline-flex items-center space-x-3 px-6 py-3 rounded border border-accent bg-accent/10 hover:bg-accent hover:text-void transition-all duration-300 font-mono text-xs uppercase tracking-widest">
-          <span>INITIALIZE SEQUENCE</span>
-          <i data-lucide="chevron-down" class="w-4 h-4"></i>
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Main Narrative Container -->
-  <main class="max-w-4xl mx-auto px-6 py-20 space-y-32">
-
-    <!-- PART I: The Fortress and the Paradox -->
-    <section id="part-1" class="space-y-8 border-l border-border pl-8 relative">
-      <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-void border-2 border-accent"></div>
-      
-      <div class="font-mono text-xs text-accent tracking-widest uppercase">Chapter 01 // State Initialization</div>
-      <h2 class="font-display text-3xl sm:text-4xl font-semibold text-white">Part I: The Fortress and the Paradox</h2>
-
-      <div class="prose-content space-y-6 font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
-        <p>I have always lived behind high walls.</p>
-        <p>
-          In my family—across both my maternal and paternal circles—I am known as the brilliant science student in Class 10, the independent developer who builds complex software from the ground up, and someone driven by pure, unrelenting intellect. But along with that brilliance came an uncompromising, unyielding pride.
-        </p>
-      </div>
-
-      <!-- System Log Equivalent -->
-      <div class="log-content space-y-4 font-mono text-xs bg-surface p-6 rounded border border-border">
-        <div class="text-accent">> LOAD_MODULE: SUBJECT_CORE_METRICS</div>
-        <div class="text-slate-400">> ATTRIBUTES: [Intellect: Peak, Software_Arch: Autonomous, Tolerance_Failure: 0%]</div>
-        <div class="text-slate-400">> PERIMETER: Absolute isolation boundary established.</div>
-      </div>
-
-      <!-- Interactive Rules Matrix -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-        <div class="p-6 rounded-lg border border-border bg-surface hover:border-slate-500 transition-colors space-y-3">
-          <div class="flex items-center justify-between font-mono text-xs">
-            <span class="text-accent flex items-center gap-1.5"><i data-lucide="lock" class="w-3.5 h-3.5"></i> RULE 01</span>
-            <span class="text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded">IMMUTABLE</span>
+      <!-- Simulated Interactive Social Request Card -->
+      <div id="request-box" class="p-5 rounded-xl border border-accent/40 bg-surface glow-box max-w-md mx-auto space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-accent/20 border border-accent flex items-center justify-center font-display font-bold text-accent">
+              F
+            </div>
+            <div>
+              <div class="font-bold text-sm text-white">Fatima Ahmed Shaolin</div>
+              <div class="text-xs text-faded font-mono">Sent you a friend request</div>
+            </div>
           </div>
-          <h3 class="font-sans font-semibold text-white">The Rule of Severance</h3>
-          <p class="text-xs text-slate-400 font-mono leading-relaxed">
-            If a friend wronged me or talked behind my back, I cut them off entirely. I would not utter a single word to them until they came and offered a sincere, formal apology.
-          </p>
+          <span class="text-[10px] font-mono text-accent bg-accent/10 px-2 py-0.5 rounded">NEW SIGNAL</span>
         </div>
-
-        <div class="p-6 rounded-lg border border-border bg-surface hover:border-slate-500 transition-colors space-y-3">
-          <div class="flex items-center justify-between font-mono text-xs">
-            <span class="text-accent flex items-center gap-1.5"><i data-lucide="shield-check" class="w-3.5 h-3.5"></i> RULE 02</span>
-            <span class="text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded">IMMUTABLE</span>
-          </div>
-          <h3 class="font-sans font-semibold text-white">Emotional Detachment</h3>
-          <p class="text-xs text-slate-400 font-mono leading-relaxed">
-            I never naturally made friends. When proposals or attention came, I ignored them completely. The contract was absolute: Career first. The heart remains strictly locked away.
-          </p>
-        </div>
+        <button id="accept-req-btn" class="w-full py-2.5 rounded bg-accent text-void font-mono font-bold text-xs uppercase tracking-wider hover:bg-white transition flex items-center justify-center gap-2">
+          <i data-lucide="check" class="w-4 h-4"></i> Accept Request & Reignite Memory
+        </button>
       </div>
 
-      <div class="prose-content pt-4 font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
-        <p>
-          I was the definition of an egoist—guarded, disciplined, and utterly untouchable. Yet, beneath that calculated fortress sat the singular paradox of my life: <span class="text-white font-semibold underline decoration-accent decoration-2 underline-offset-4">Fatima Ahmed Shaolin</span>.
-        </p>
+      <!-- Mother's Mandate (Revealed after clicking accept) -->
+      <div id="mother-dialogue" class="hidden p-6 rounded-lg border-l-4 border-accent bg-surface/50 font-serif italic text-lg text-slate-200 space-y-3">
+        <p>"I have seen many girls, Tonmoy. I don't trust a stranger to enter this house as my daughter-in-law. I will make a decision for your future that you cannot deny—I want Shaolin to be your wife."</p>
+        <div class="text-xs font-mono text-accent not-italic">— My Mother (2026, Noapra & Khulna)</div>
       </div>
     </section>
 
-    <!-- PART II: The Classroom in 2016 -->
-    <section class="space-y-8 border-l border-border pl-8 relative">
-      <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-void border-2 border-slate-500"></div>
+    <!-- CHAPTER 4: THE CONFESSION & THE CRITICAL HEARTBREAK -->
+    <section id="act-4" class="space-y-8 mb-24">
+      <div class="flex items-center gap-3 font-mono text-xs text-crimson">
+        <span class="px-2 py-0.5 rounded bg-crimson/10 border border-crimson/30">ACT 04</span>
+        <span>THE SURRENDER & THE FRACTURE</span>
+      </div>
 
-      <div class="font-mono text-xs text-faded tracking-widest uppercase">Chapter 02 // Root Origin</div>
-      <h2 class="font-display text-3xl sm:text-4xl font-semibold text-white">Part II: The Classroom in 2016</h2>
-
-      <div class="prose-content space-y-6 font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
+      <div class="font-serif text-lg sm:text-xl text-slate-200 leading-relaxed space-y-4">
         <p>
-          The seed was planted in 2016, when I was just eight years old in Class 1.
+          I never wanted casual romance. I could have said yes to dozens of proposals. I wanted to marry her. Listening to my family’s unanimous validation at Noapra, I made the decision to break every wall I had ever built.
         </p>
         <p>
-          Because of the close bond between our mothers, Shaolin was the only girl allowed past my perimeter. At that age, you don’t understand the concept of love, but you feel its weight. Even back then, an irrational, sharp jealousy gripped me whenever she spoke to or played with anyone else—even other young girls. I would march straight to her mother and mine, lodging bitter, childish complaints that she was ignoring me.
+          I contacted her closest friend. When asked if I truly loved her, I discarded my pride: <strong>"Yes. I love her."</strong>
         </p>
-        <p>
-          We stayed friends through Class 2 and Class 3, until the end of 2018, when my father relocated our family to another city. We were only children—no phones, no accounts, no way to stay connected. The separation was total. For years, I believed time had buried that classroom. I didn't know that my heart had quietly frozen in place.
+        <p class="text-crimson font-mono text-sm">
+          Then the strike landed: Shaolin was deeply in love with someone else—a senior named Roktim.
         </p>
       </div>
 
-      <div class="log-content space-y-4 font-mono text-xs bg-surface p-6 rounded border border-border">
-        <div class="text-slate-400">> EVENT_LOG [2016-2018]: EXCEPTION_PERMITTED -> Subject: "Shaolin"</div>
-        <div class="text-slate-400">> EVENT_LOG [2018_Q4]: RELOCATION_DISCONNECT -> Channel dropped. Heart state: FROZEN.</div>
+      <!-- The Interactive Begging & Heartbreak Trigger -->
+      <div class="p-6 rounded-xl border border-crimson/50 bg-void space-y-6 font-mono text-xs text-slate-300">
+        <div class="text-crimson font-bold uppercase tracking-wider flex items-center gap-2">
+          <i data-lucide="heart-crack" class="w-4 h-4 text-crimson"></i>
+          CRITICAL MOMENT: STRIPPING THE EGO
+        </div>
+
+        <div class="space-y-3 font-serif text-base text-slate-200 italic">
+          <div class="p-3 bg-surface rounded border-l-2 border-accent">
+            "I have loved you for years without touching you, without seeing you, without demanding your presence. My love has been entirely pure. Please, give me just one chance."
+          </div>
+          <div class="p-3 bg-surface rounded border-l-2 border-slate-500">
+            "I respect your love, Tonmoy. But my heart belongs to someone else. Even if you were the best person in the world, the person I love remains the best to me at all costs."
+          </div>
+        </div>
+
+        <button id="break-heart-btn" class="w-full py-3 rounded border border-crimson bg-crimson/20 hover:bg-crimson hover:text-white transition-all text-xs font-mono font-bold uppercase tracking-widest text-crimson flex items-center justify-center gap-2">
+          <i data-lucide="hammer" class="w-4 h-4"></i>
+          [CLICK TO WITNESS THE COMPLETE COLLAPSE OF PRIDE]
+        </button>
       </div>
     </section>
 
-    <!-- PART III: The Timeline Reconnects -->
-    <section class="space-y-8 border-l border-border pl-8 relative">
-      <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-void border-2 border-accent"></div>
-
-      <div class="font-mono text-xs text-accent tracking-widest uppercase">Chapter 03 // Signal Resumption</div>
-      <h2 class="font-display text-3xl sm:text-4xl font-semibold text-white">Part III: The Timeline Reconnects (2025–2026)</h2>
-
-      <!-- Interactive Timeline Component -->
-      <div class="p-6 rounded-lg border border-border bg-surface space-y-6 my-6 font-mono">
-        <div class="text-xs uppercase text-slate-400 tracking-wider">Chronology Vector</div>
-        
-        <div class="space-y-4 text-xs">
-          <div class="flex items-start space-x-4">
-            <span class="text-accent font-semibold whitespace-nowrap">2016</span>
-            <div class="text-slate-300">Class 1 — First meeting and childhood bond under the watch of our mothers.</div>
-          </div>
-          <div class="flex items-start space-x-4">
-            <span class="text-faded font-semibold whitespace-nowrap">2018</span>
-            <div class="text-slate-400">Class 3 End — Relocation to another city. Total silence begins.</div>
-          </div>
-          <div class="flex items-start space-x-4">
-            <span class="text-accent font-semibold whitespace-nowrap">Early 2025</span>
-            <div class="text-slate-300">Facebook reconnect request received. Sparse, dignified, and distant communication.</div>
-          </div>
-          <div class="flex items-start space-x-4">
-            <span class="text-crimson font-semibold whitespace-nowrap">2026</span>
-            <div class="text-slate-200">Reunion at Noapra, maternal proposal confirmation, confession, and the decline.</div>
-          </div>
-        </div>
+    <!-- CHAPTER 5: THE NUMBED REALITY & THE FINAL MONUMENT -->
+    <section id="act-5" class="space-y-8 mb-24 transition-opacity duration-1000 opacity-60">
+      <div class="flex items-center gap-3 font-mono text-xs text-faded">
+        <span class="px-2 py-0.5 rounded bg-surface border border-border">ACT 05</span>
+        <span>THE NUMB REALITY & THE FINAL CODE</span>
       </div>
 
-      <div class="prose-content space-y-6 font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
+      <div class="font-serif text-lg sm:text-xl text-slate-300 leading-relaxed space-y-6">
         <p>
-          In early 2025, after years of complete silence, a notification appeared on my screen:
-        </p>
-        
-        <div class="p-4 rounded border border-border bg-void flex items-center space-x-4 font-mono text-sm">
-          <i data-lucide="user-plus" class="w-5 h-5 text-accent"></i>
-          <span><strong class="text-white">Fatima Ahmed Shaolin</strong> sent you a friend request.</span>
-        </div>
-
-        <p>
-          Then came 2026, when destiny seemed to set its own stage. One evening, my mother looked at me with unyielding certainty:
-        </p>
-
-        <blockquote class="border-l-2 border-accent pl-6 italic text-slate-200 font-serif my-4">
-          "I have seen many girls, Tonmoy. I don't trust a stranger to enter this house as my daughter-in-law. I will make a decision for your future that you cannot deny—I want Shaolin to be your wife."
-        </blockquote>
-
-        <p>
-          To hide the rush of blood to my face, I put up my usual defensive armor: <em>"My career comes first. There is no room for anyone in my heart."</em>
+          I—the boy who would cut off lifelong friends until they begged for forgiveness—begged her. And her unwavering, polite loyalty to Roktim was the exact wall that shut me out forever.
         </p>
         <p>
-          She brushed it off with total conviction: <em>"I don't care when you learn to love. Shaolin is the one I want."</em> My chest swelled with an impossible hope.
-        </p>
-      </div>
-    </section>
-
-    <!-- PART IV: The Reunion at Noapra -->
-    <section class="space-y-8 border-l border-border pl-8 relative">
-      <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-void border-2 border-slate-500"></div>
-
-      <div class="font-mono text-xs text-faded tracking-widest uppercase">Chapter 04 // Convergence</div>
-      <h2 class="font-display text-3xl sm:text-4xl font-semibold text-white">Part IV: The Reunion at Noapra (2026)</h2>
-
-      <div class="prose-content space-y-6 font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
-        <p>
-          In 2026, my mother and I traveled back to our old region, staying at my maternal aunt’s home in Noapra, Jashore, with a brief checkup trip to Khulna City Medical College and Hospital.
+          The machinery broke. The science focus and intricate lines of code slipped through my fingers. But the ego died with it: insults, disrespect, and words behind my back now mean nothing. The pain neutralized into pure numbness.
         </p>
         <p>
-          During our stay, Shaolin and her family visited us at my aunt’s home. As we all sat together in the living room, my aunt watched Shaolin intently. When they left, my aunt and sisters turned to my mother in unanimous approval:
-        </p>
-
-        <div class="p-6 rounded border border-border/80 bg-surface/50 font-serif italic text-slate-200 text-center">
-          "She is so graceful, calm, and composed. She matches Tonmoy perfectly. They look as if they were made for each other."
-        </div>
-
-        <p>
-          Shortly after, a grand gathering of our old school circle brought us all together again. I watched her across the room—her poise, her quiet dignity, her unmatched respectfulness.
-        </p>
-        <p>
-          I never wanted a temporary girlfriend. If I wanted casual romance, I could have said yes to dozens of proposals over the years. I wanted to marry her. Listening to my family’s constant validation, I made the decision to finally speak.
-        </p>
-      </div>
-    </section>
-
-    <!-- PART V: The Surrender of Pride -->
-    <section class="space-y-8 border-l border-crimson pl-8 relative">
-      <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-void border-2 border-crimson"></div>
-
-      <div class="font-mono text-xs text-crimson tracking-widest uppercase">Chapter 05 // Critical System Failure</div>
-      <h2 class="font-display text-3xl sm:text-4xl font-semibold text-white">Part V: The Surrender of Pride</h2>
-
-      <div class="prose-content space-y-6 font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
-        <p>
-          Unsure of her current life, I first contacted her closest friend to ask if Shaolin was in a relationship. Her friend questioned my motives repeatedly: <em>"Forget about family expectations for a second, Tonmoy. Do you actually love her?"</em>
-        </p>
-        <p>
-          I threw away my lifelong pride. I answered: <strong>"Yes. I love her."</strong>
-        </p>
-        <p>
-          Then came the devastating truth: Shaolin was already deeply in love with someone else—a senior named Roktim.
+          Friends tell me: <em>"Tonmoy, you are 18. You're brilliant, you have a massive future, you will find someone better."</em> They don't understand. If I wanted options, I would have taken them. I never wanted an upgrade. I only ever wanted Shaolin.
         </p>
       </div>
 
-      <!-- Dialogue Terminal Box -->
-      <div class="p-6 rounded-lg border border-crimson/50 bg-void font-mono space-y-6 my-6 text-sm">
-        <div class="text-xs text-crimson uppercase tracking-wider flex items-center gap-2">
-          <i data-lucide="terminal" class="w-4 h-4"></i> EXPLICIT_OVERRIDE // TRANSMISSION_LOG
-        </div>
-        
-        <div class="space-y-4">
-          <div class="p-4 rounded bg-surface border-l-2 border-accent">
-            <span class="text-accent text-xs font-semibold block mb-1">TONMOY:</span>
-            <p class="text-slate-200">"I have loved you for years without touching you, without seeing you, without demanding your presence. My love has been entirely pure. Please, give me just one chance."</p>
-          </div>
-
-          <div class="p-4 rounded bg-surface border-l-2 border-slate-400">
-            <span class="text-slate-400 text-xs font-semibold block mb-1">SHAOLIN:</span>
-            <p class="text-slate-200">"I respect your love, Tonmoy. But my heart belongs to someone else. Even if you were the best person in the world, the person I love remains the best to me at all costs."</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="prose-content space-y-6 font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
-        <p>And then, the unthinkable happened.</p>
-        <p>
-          I—the boy who would cut off lifelong friends until they begged for forgiveness, the boy who refused to speak to anyone who dared utter a single word behind my back—begged her.
-        </p>
-        <p>
-          I pleaded for a chance. And with the same unwavering, polite respect, she stood firm in her loyalty to the person she loved. The very loyalty that made her the most honorable person in my eyes was the exact wall that shut me out forever.
-        </p>
-      </div>
-    </section>
-
-    <!-- PART VI: The Numbed Reality & Epilogue -->
-    <section class="space-y-8 border-l border-border pl-8 relative">
-      <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-void border-2 border-slate-700"></div>
-
-      <div class="font-mono text-xs text-faded tracking-widest uppercase">Chapter 06 // The Null State</div>
-      <h2 class="font-display text-3xl sm:text-4xl font-semibold text-white">Part VI: The Numbed Reality</h2>
-
-      <div class="prose-content space-y-6 font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
-        <p>The decline broke the internal machinery that used to drive me.</p>
-        <p>
-          Today, I am completely lost. The sharp focus that once allowed me to master complex science problems and write intricate lines of code feels dulled, slipping through my fingers like water. My brain simply refuses to lock in the way it used to.
-        </p>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6 font-sans">
-          <div class="p-5 rounded bg-surface/60 border border-border space-y-2">
-            <h4 class="text-sm font-semibold text-white">The Death of Ego</h4>
-            <p class="text-xs text-slate-400 leading-relaxed">The pride that once demanded apologies from everyone is entirely gone. Disrespect and words behind my back now register as absolute zero.</p>
-          </div>
-          <div class="p-5 rounded bg-surface/60 border border-border space-y-2">
-            <h4 class="text-sm font-semibold text-white">The Complete Numbness</h4>
-            <p class="text-xs text-slate-400 leading-relaxed">It does not hurt; it does not anger me. I am locked within my own hollow space that the world has lost its ability to provoke a reaction.</p>
-          </div>
-        </div>
-
-        <p>
-          My family still speaks casually about approaching her family with a formal proposal in the future. They have no idea that the entire war was already fought and lost in the private silence of my screen.
-        </p>
-        <p>
-          Friends tell me: <em>"Tonmoy, you are 18. You're brilliant, you have a massive future, you will find someone better."</em> They don't understand. If I wanted options, I would have taken the ones that came to me. I never wanted an upgrade. I only ever wanted Shaolin.
-        </p>
-      </div>
-
-      <!-- Final Monument Block -->
-      <div class="mt-16 p-8 sm:p-12 rounded-xl border border-border bg-gradient-to-b from-surface to-void text-center space-y-6 relative overflow-hidden glow-box">
-        <div class="font-mono text-xs tracking-widest text-accent uppercase">EPILOGUE // THE LOCKED SYSTEM</div>
-        <p class="font-serif italic text-xl sm:text-2xl text-white max-w-2xl mx-auto leading-relaxed">
+      <!-- Sealed Monument -->
+      <div class="p-8 sm:p-12 rounded-2xl border border-border bg-gradient-to-b from-surface/80 to-void text-center space-y-6 relative overflow-hidden">
+        <div class="font-mono text-xs tracking-widest text-accent uppercase">FINAL SEALED ARCHIVE</div>
+        <p class="font-serif italic text-2xl sm:text-3xl text-white max-w-xl mx-auto leading-relaxed">
           "I gave the absolute purest, most humble version of myself to the only person who ever mattered."
         </p>
-        <div class="pt-4 font-mono text-xs text-faded uppercase tracking-wider">
-          Muntasir Shahriar Tonmoy — 2026
+        <div class="font-mono text-xs text-faded uppercase pt-4">
+          MUNTASIR SHAHRIAR TONMOY — 2026
         </div>
       </div>
     </section>
 
-  </main>
+  </div>
 
-  <!-- Footer -->
-  <footer class="border-t border-border py-12 px-6 text-center font-mono text-xs text-faded space-y-3">
-    <div>ARCHIVE COMPLETE // MONUMENT PERMANENTLY SEALED</div>
-    <div>DESIGNED AS A SOVEREIGN DIGITAL INSTALLATION</div>
-  </footer>
-
-  <!-- Script for Interactions and Audio Synth -->
+  <!-- Interactive Logic & Sound Synthesis -->
   <script>
-    // Initialize Icons
     lucide.createIcons();
 
-    // Scroll Progress
-    window.addEventListener('scroll', () => {
-      const winScroll = document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      document.getElementById('scroll-progress').style.width = scrolled + '%';
-    });
-
-    // View Toggle Mode
-    const viewToggleBtn = document.getElementById('view-toggle');
-    const viewToggleText = document.getElementById('view-toggle-text');
-    let isLogView = false;
-
-    viewToggleBtn.addEventListener('click', () => {
-      isLogView = !isLogView;
-      if (isLogView) {
-        document.body.classList.add('system-log-view');
-        viewToggleText.textContent = 'VIEW: SYSTEM LOG';
-      } else {
-        document.body.classList.remove('system-log-view');
-        viewToggleText.textContent = 'VIEW: LITERARY';
-      }
-    });
-
-    // Ambient Audio Synthesizer (Web Audio API)
+    // Sound Synthesizer via Web Audio API
     let audioCtx = null;
-    let osc1 = null;
-    let osc2 = null;
-    let gainNode = null;
-    let isPlaying = false;
+    let isMuted = true;
+    const soundBtn = document.getElementById('sound-btn');
+    const soundStatus = document.getElementById('sound-status');
+    const soundIcon = document.getElementById('sound-icon');
 
-    const audioToggleBtn = document.getElementById('audio-toggle');
-    const audioIcon = document.getElementById('audio-icon');
-    const audioText = document.getElementById('audio-text');
-
-    audioToggleBtn.addEventListener('click', () => {
-      if (!isPlaying) {
-        // Initialize Web Audio
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        audioCtx = new AudioContext();
-
-        // Low ambient drone
-        osc1 = audioCtx.createOscillator();
-        osc2 = audioCtx.createOscillator();
-        gainNode = audioCtx.createGain();
-
-        osc1.type = 'sine';
-        osc1.frequency.setValueAtTime(55, audioCtx.currentTime); // Low A1
-
-        osc2.type = 'sine';
-        osc2.frequency.setValueAtTime(110, audioCtx.currentTime); // A2
-
-        // Soft volume
-        gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
-
-        osc1.connect(gainNode);
-        osc2.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-
-        osc1.start();
-        osc2.start();
-
-        isPlaying = true;
-        audioText.textContent = 'ATMOSPHERE: ACTIVE';
-        audioToggleBtn.classList.add('border-accent', 'text-accent');
-      } else {
-        if (audioCtx) {
-          audioCtx.close();
-        }
-        isPlaying = false;
-        audioText.textContent = 'ATMOSPHERE: OFF';
-        audioToggleBtn.classList.remove('border-accent', 'text-accent');
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       }
+    }
+
+    function playTone(freq, type, duration, gainVol = 0.1) {
+      if (isMuted || !audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(gainVol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    soundBtn.addEventListener('click', () => {
+      initAudio();
+      isMuted = !isMuted;
+      if (!isMuted) {
+        soundStatus.textContent = "SOUND: ON";
+        soundBtn.classList.add('border-accent', 'text-accent');
+        playTone(440, 'sine', 0.5, 0.05);
+      } else {
+        soundStatus.textContent = "SOUND: MUTED";
+        soundBtn.classList.remove('border-accent', 'text-accent');
+      }
+    });
+
+    // 1. Ripping Childhood Sticky Note
+    const ripBtn = document.getElementById('rip-btn');
+    const note = document.getElementById('childhood-note');
+    const ripAftermath = document.getElementById('rip-aftermath');
+
+    ripBtn.addEventListener('click', () => {
+      initAudio();
+      playTone(150, 'sawtooth', 0.6, 0.15); // Tear sound
+      note.classList.add('rip-away');
+      ripBtn.style.display = 'none';
+
+      // Memory particles blowing away
+      confetti({
+        particleCount: 50,
+        spread: 80,
+        origin: { y: 0.4 },
+        colors: ['#FEF3C7', '#FDE68A', '#78350F']
+      });
+
+      setTimeout(() => {
+        note.style.display = 'none';
+        ripAftermath.classList.remove('hidden');
+      }, 1100);
+    });
+
+    // 2. Accept Facebook Request Trigger
+    const acceptReqBtn = document.getElementById('accept-req-btn');
+    const requestBox = document.getElementById('request-box');
+    const motherDialogue = document.getElementById('mother-dialogue');
+
+    acceptReqBtn.addEventListener('click', () => {
+      initAudio();
+      playTone(587.33, 'triangle', 0.4, 0.1); // High D note (Notification chime)
+      requestBox.innerHTML = `
+        <div class="text-center py-3 text-accent font-mono text-xs flex items-center justify-center gap-2">
+          <i data-lucide="check-circle" class="w-4 h-4"></i> CONNECTION ACCEPTED — MEMORY STREAM REOPENED (2025)
+        </div>
+      `;
+      lucide.createIcons();
+      motherDialogue.classList.remove('hidden');
+    });
+
+    // 3. Heartbreak / Shatter Pride Trigger
+    const breakHeartBtn = document.getElementById('break-heart-btn');
+    const heartbreakOverlay = document.getElementById('heartbreak-overlay');
+    const ruleCard1 = document.getElementById('rule-card-1');
+    const ruleCard2 = document.getElementById('rule-card-2');
+    const act5 = document.getElementById('act-5');
+
+    breakHeartBtn.addEventListener('click', () => {
+      initAudio();
+      // Low jarring chord
+      playTone(90, 'sawtooth', 1.2, 0.25);
+      playTone(65, 'square', 1.5, 0.2);
+
+      // Screen Fracture Shake
+      document.body.classList.add('shake-active');
+      heartbreakOverlay.style.opacity = '1';
+
+      // Burn Rules to Ashes
+      ruleCard1.classList.add('burn-rule');
+      ruleCard2.classList.add('burn-rule');
+
+      // Heartbreak particles (Crimson and Ash)
+      confetti({
+        particleCount: 100,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ['#E11D48', '#881337', '#0F172A']
+      });
+
+      breakHeartBtn.innerHTML = `<span class="text-crimson">WALLS CRUMBLED // EGO DESTROYED</span>`;
+      breakHeartBtn.disabled = true;
+
+      setTimeout(() => {
+        document.body.classList.remove('shake-active');
+        act5.classList.remove('opacity-60');
+        act5.classList.add('opacity-100');
+        act5.scrollIntoView({ behavior: 'smooth' });
+      }, 700);
     });
   </script>
 </body>
