@@ -1,22 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="select-none">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>The Architecture of an Unspoken Vow — Muntasir Shahriar Tonmoy</title>
-  
-  <!-- Fonts -->
+
+  <!-- Google Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Caveat:wght@600;700&family=JetBrains+Mono:wght@300;400;600;800&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Caveat:wght@600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,800;1,300&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400;1,600&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS -->
+  <!-- Tailwind CSS Framework CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons -->
+
+  <!-- Lucide Icons Framework -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Canvas Confetti for Ash and Shards -->
+
+  <!-- Canvas Confetti Engine -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+  <!-- Tailwind Configuration Extended -->
   <script>
     tailwind.config = {
       theme: {
@@ -29,12 +32,31 @@
             sans: ['"Inter"', 'sans-serif'],
           },
           colors: {
-            desk: '#080A0F',
-            wood: '#111726',
+            void: '#030508',
+            desk: '#080C14',
+            wood: '#0F172A',
             paper: '#FFFBEB',
             accent: '#38BDF8',
             crimson: '#E11D48',
-            faded: '#475569'
+            amberNote: '#FEF3C7',
+            faded: '#475569',
+            borderGlow: '#1E293B'
+          },
+          keyframes: {
+            subtleFloat: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(-1deg)' },
+              '50%': { transform: 'translateY(-6px) rotate(1deg)' },
+            },
+            heartBeat: {
+              '0%, 100%': { transform: 'scale(1)' },
+              '15%': { transform: 'scale(1.08)' },
+              '30%': { transform: 'scale(0.98)' },
+              '45%': { transform: 'scale(1.04)' },
+            }
+          },
+          animation: {
+            'float-slow': 'subtleFloat 6s ease-in-out infinite',
+            'heart-beat': 'heartBeat 1.2s ease-in-out infinite',
           }
         }
       }
@@ -42,67 +64,130 @@
   </script>
 
   <style>
-    /* Flashlight / Vignette Effect following Cursor */
-    .flashlight-desk {
-      background: radial-gradient(circle 500px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(30, 41, 59, 0.25), rgba(8, 10, 15, 0.98) 75%);
+    /* Global Reset & Tactical Atmosphere */
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
-    /* Torn Paper Physics */
-    .torn-left {
-      clip-path: polygon(0 0, 52% 0, 48% 20%, 55% 40%, 45% 60%, 53% 80%, 48% 100%, 0 100%);
-      transform: translateX(-40px) rotate(-8deg);
-      opacity: 0.3;
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .torn-right {
-      clip-path: polygon(52% 0, 100% 0, 100% 100%, 48% 100%, 53% 80%, 45% 60%, 55% 40%, 48% 20%);
-      transform: translateX(40px) rotate(8deg);
-      opacity: 0.3;
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    body {
+      background-color: #030508;
+      color: #CBD5E1;
+      overflow-x: hidden;
+      cursor: default;
     }
 
-    /* Screen Glitch on Rejection */
-    @keyframes violent-impact {
-      0% { transform: scale(1) translate(0, 0); filter: invert(0); }
-      10% { transform: scale(1.03) translate(-15px, 12px) skewX(4deg); filter: invert(0.8) contrast(200%); }
-      30% { transform: scale(0.98) translate(12px, -8px) skewY(-2deg); }
-      50% { transform: scale(1.01) translate(-8px, -6px); }
-      70% { transform: scale(0.99) translate(6px, 4px); filter: contrast(150%); }
-      100% { transform: scale(1) translate(0, 0); filter: invert(0) contrast(100%); }
-    }
-    .impact-active {
-      animation: violent-impact 0.6s ease-in-out forwards;
+    /* Interactive Spotlight Following Cursor */
+    .spotlight {
+      background: radial-gradient(circle 650px at var(--cursor-x, 50vw) var(--cursor-y, 50vh), rgba(30, 41, 59, 0.35), rgba(3, 5, 8, 0.98) 70%);
     }
 
-    /* Scanlines */
-    .scanlines {
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-      background-size: 100% 4px;
+    /* Screen Scanlines Texture */
+    .scanlines-overlay {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%);
+      background-size: 100% 3px;
+    }
+
+    /* Realistic Paper Tear Splitting */
+    .paper-tear-left {
+      clip-path: polygon(0 0, 52% 0, 47% 22%, 54% 44%, 46% 65%, 53% 82%, 48% 100%, 0 100%);
+      transform: translateX(-50px) translateY(10px) rotate(-12deg) scale(0.95);
+      opacity: 0.2;
+      filter: blur(1px);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .paper-tear-right {
+      clip-path: polygon(52% 0, 100% 0, 100% 100%, 48% 100%, 53% 82%, 46% 65%, 54% 44%, 47% 22%);
+      transform: translateX(50px) translateY(-10px) rotate(12deg) scale(0.95);
+      opacity: 0.2;
+      filter: blur(1px);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Glass Fracture Glitch Shake */
+    @keyframes screenFractureShake {
+      0% { transform: translate(0, 0) rotate(0deg); filter: contrast(100%); }
+      15% { transform: translate(-16px, 12px) rotate(-1.5deg); filter: invert(0.8) contrast(200%); }
+      30% { transform: translate(16px, -12px) rotate(1.5deg); filter: hue-rotate(90deg); }
+      45% { transform: translate(-10px, -8px) rotate(-0.8deg); }
+      60% { transform: translate(10px, 8px) rotate(0.8deg); filter: contrast(150%); }
+      75% { transform: translate(-4px, 2px); }
+      100% { transform: translate(0, 0) rotate(0deg); filter: contrast(100%); }
+    }
+    .screen-shatter-active {
+      animation: screenFractureShake 0.75s ease-in-out forwards;
+    }
+
+    /* Custom Locked Stage Backdrop */
+    .stage-card {
+      transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .stage-locked {
+      opacity: 0.15;
+      filter: grayscale(1) blur(2px);
+      pointer-events: none;
+    }
+    .stage-active {
+      opacity: 1;
+      filter: grayscale(0) blur(0px);
+      pointer-events: auto;
+    }
+
+    /* Custom Progress Bar Glow */
+    .glow-line {
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
     }
   </style>
 </head>
-<body class="bg-desk text-slate-200 font-sans selection:bg-crimson selection:text-white min-h-screen overflow-x-hidden relative scanlines flashlight-desk">
 
-  <!-- Interactive Glass Fracture Canvas -->
-  <canvas id="shatter-canvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
+<body class="min-h-screen relative scanlines-overlay spotlight font-sans pb-40">
 
-  <!-- Ambient Sound HUD -->
-  <div class="fixed top-4 right-4 z-40 flex items-center gap-3">
-    <div class="hidden sm:block text-[11px] font-mono text-faded tracking-wider uppercase">IMMERSIVE DESK SIMULATION</div>
-    <button id="sound-btn" class="px-3.5 py-1.5 rounded-full border border-slate-700 bg-wood/80 backdrop-blur-md text-xs font-mono flex items-center gap-2 hover:border-accent transition text-slate-300 shadow-xl">
-      <i data-lucide="volume-2" id="sound-icon" class="w-3.5 h-3.5"></i>
-      <span id="sound-status">AUDIO ENGINE: ACTIVE</span>
+  <!-- Real-time Glass Fracture Canvas -->
+  <canvas id="glass-canvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
+
+  <!-- Void Particles Canvas -->
+  <canvas id="void-canvas" class="fixed inset-0 pointer-events-none z-0 w-full h-full opacity-40"></canvas>
+
+  <!-- TOP HUD BAR: Real-time System State -->
+  <header class="fixed top-0 left-0 right-0 z-40 bg-void/85 backdrop-blur-md border-b border-slate-800/80 px-6 py-3.5 flex justify-between items-center text-xs font-mono">
+    <div class="flex items-center gap-3">
+      <span class="relative flex h-2.5 w-2.5">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent"></span>
+      </span>
+      <span class="tracking-widest uppercase text-slate-300 font-semibold">PSYCHOLOGICAL ARCHIVE // MST_TONMOY</span>
+    </div>
+
+    <!-- Progress Indicator Step Counter -->
+    <div class="hidden md:flex items-center gap-2 text-slate-400 font-mono">
+      <span id="hud-step">ACT 0 OF 6</span>
+      <span class="text-slate-600">|</span>
+      <span id="hud-status" class="text-accent">AWAITING CALIBRATION</span>
+    </div>
+
+    <!-- Sound Control Button -->
+    <button id="audio-master-btn" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-700 bg-wood/80 hover:border-accent text-slate-300 transition text-[11px]">
+      <i data-lucide="volume-2" id="audio-icon" class="w-3.5 h-3.5 text-accent"></i>
+      <span id="audio-btn-label">AUDIO ENGINE: READY</span>
     </button>
+  </header>
+
+  <!-- Fixed Top Global Progress Bar -->
+  <div class="fixed top-[49px] left-0 h-[2px] bg-slate-800 w-full z-40">
+    <div id="experience-progress" class="h-full bg-accent glow-line transition-all duration-700 w-[0%]"></div>
   </div>
 
-  <!-- MAIN SCENARIO / DESK -->
-  <div class="max-w-3xl mx-auto px-6 py-16 sm:py-24 space-y-36 relative">
+  <!-- MAIN SCENARIO DIRECTOR WRAPPER -->
+  <main class="max-w-3xl mx-auto px-6 pt-32 space-y-28 relative z-10">
 
-    <!-- HERO INTRODUCTION -->
-    <header class="text-center space-y-6 pt-10">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-slate-800 bg-wood font-mono text-xs text-accent">
-        <span class="w-2 h-2 rounded-full bg-accent animate-ping"></span>
-        PHYSICAL RECORD // TONMOY's SANCTUM (2016–2026)
+    <!-- ========================================== -->
+    <!-- STAGE 0: PROLOGUE & CALIBRATION (START) -->
+    <!-- ========================================== -->
+    <section id="stage-0" class="stage-card stage-active text-center space-y-8 min-h-[75vh] flex flex-col justify-center items-center">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-accent/30 bg-accent/10 font-mono text-xs text-accent">
+        <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
+        <span>RESTRICTED MEMORY FILE — SEQUENTIAL ACCESS MANDATORY</span>
       </div>
 
       <h1 class="font-display text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white leading-tight drop-shadow-2xl">
@@ -110,220 +195,423 @@
         <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent via-slate-100 to-crimson">Unspoken Vow</span>
       </h1>
 
-      <p class="font-serif italic text-lg sm:text-2xl text-slate-400 max-w-xl mx-auto leading-relaxed">
-        "I was the boy who built an impenetrable fortress. This desk holds the physical wreckage of the only paradox that brought it down."
+      <p class="font-serif italic text-lg sm:text-2xl text-slate-300 max-w-xl mx-auto leading-relaxed">
+        "I was an egoist. A boy who lived behind high walls of pure intellect and absolute detachment. This is the reality of the single paradox that shattered every law I ever lived by."
       </p>
 
-      <div class="pt-6 font-mono text-xs text-faded flex justify-center items-center gap-2 animate-bounce">
-        <i data-lucide="mouse-pointer" class="w-4 h-4"></i>
-        <span>INTERACT WITH THE OBJECTS ON THE DESK BELOW</span>
-      </div>
-    </header>
-
-    <!-- ACT 1: THE IMPENETRABLE RULES MATRIX -->
-    <section class="space-y-6 border-l-2 border-accent/40 pl-6 relative">
-      <div class="flex items-center gap-2 font-mono text-xs text-accent">
-        <span class="bg-accent/10 px-2 py-0.5 rounded border border-accent/20">ACT 01</span>
-        <span>SECURITY PROTOCOLS & UNYIELDING PRIDE</span>
-      </div>
-
-      <p class="font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
-        In my family, I was known as the brilliant Class 10 science student and the independent developer who engineered complex systems from logic. With intellect came absolute pride:
-      </p>
-
-      <!-- The Two Rigid Vault Locks -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 font-mono">
-        <div class="p-5 rounded-xl border border-slate-700 bg-wood/80 backdrop-blur-sm space-y-2 relative shadow-lg">
-          <div class="flex justify-between items-center text-xs">
-            <span class="text-accent font-bold flex items-center gap-1.5"><i data-lucide="lock" class="w-3.5 h-3.5"></i> RULE 01</span>
-            <span class="text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded text-[10px]">ACTIVE</span>
-          </div>
-          <div class="text-sm font-bold text-white">The Rule of Severance</div>
-          <p class="text-xs text-slate-400 font-sans leading-normal">
-            If a friend wronged me or talked behind my back, I cut them off entirely until they came with a formal apology.
-          </p>
-        </div>
-
-        <div class="p-5 rounded-xl border border-slate-700 bg-wood/80 backdrop-blur-sm space-y-2 relative shadow-lg">
-          <div class="flex justify-between items-center text-xs">
-            <span class="text-accent font-bold flex items-center gap-1.5"><i data-lucide="shield" class="w-3.5 h-3.5"></i> RULE 02</span>
-            <span class="text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded text-[10px]">ACTIVE</span>
-          </div>
-          <div class="text-sm font-bold text-white">Emotional Detachment</div>
-          <p class="text-xs text-slate-400 font-sans leading-normal">
-            Ignored all proposals and attention completely. Career first. The heart remains strictly locked away.
-          </p>
-        </div>
+      <div class="pt-6 space-y-4 max-w-md w-full">
+        <button id="start-btn" class="w-full py-4 rounded-xl bg-accent text-void font-mono font-bold text-xs uppercase tracking-widest hover:bg-white hover:shadow-[0_0_25px_rgba(56,189,248,0.5)] transition-all flex items-center justify-center gap-3">
+          <i data-lucide="power" class="w-4 h-4"></i>
+          <span>ENTER THE SIMULATION & CALIBRATE REALITY</span>
+        </button>
+        <p class="text-[11px] font-mono text-faded uppercase tracking-wider">
+          Note: You cannot scroll past uncompleted memories. You must experience each step.
+        </p>
       </div>
     </section>
 
-    <!-- ACT 2: THE 2016 TORN PAPER (PHYSICAL INTERACTION) -->
-    <section class="space-y-6 border-l-2 border-amber-400/40 pl-6 relative">
-      <div class="flex items-center gap-2 font-mono text-xs text-amber-300">
-        <span class="bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20">ACT 02</span>
-        <span>THE CLASSROOM IN 2016 // CHILDHOOD BOND</span>
+
+    <!-- ========================================== -->
+    <!-- STAGE 1: THE FORTRESS & UNBREAKABLE RULES -->
+    <!-- ========================================== -->
+    <section id="stage-1" class="stage-card stage-locked space-y-8 border-l-2 border-accent pl-6 sm:pl-8 relative">
+      <div class="flex items-center gap-2 font-mono text-xs text-accent">
+        <span class="bg-accent/10 px-2 py-0.5 rounded border border-accent/30 font-bold">ACT 01</span>
+        <span>THE FORTRESS MATRIX // UNYIELDING PRIDE</span>
       </div>
 
-      <p class="font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
-        Yet beneath that calculated fortress sat the singular paradox: <strong class="text-white">Fatima Ahmed Shaolin</strong>. We met in Class 1 (2016). She was the only girl allowed past my perimeter. Even as an eight-year-old, I felt a sharp, possessive jealousy whenever she spoke to anyone else.
-      </p>
+      <div class="space-y-4 font-serif text-lg sm:text-xl text-slate-200 leading-relaxed">
+        <p>
+          I have always lived behind high walls. In my family—across both maternal and paternal circles—I was known as the brilliant Class 10 science student, the independent developer who engineered complex systems from scratch, driven by pure intellect.
+        </p>
+        <p>
+          Along with that brilliance came an uncompromising, unyielding pride. My boundaries were absolute.
+        </p>
+      </div>
 
-      <!-- Physical Paper Memory on the Desk -->
-      <div class="py-6 text-center">
-        <div id="physical-paper-wrap" class="relative inline-block select-none cursor-grab active:cursor-grabbing transition-transform">
-          <!-- Main Intact Note -->
-          <div id="memory-paper" class="w-80 sm:w-96 bg-paper text-slate-900 p-6 rounded shadow-2xl border-t-8 border-amber-300 font-hand text-2xl transform -rotate-1 transition-all duration-500 space-y-4">
-            <div class="flex justify-between items-center text-xs font-mono text-slate-500 uppercase tracking-widest">
-              <span>CLASSROOM LOG: 2016–2018</span>
-              <i data-lucide="bookmark" class="w-4 h-4 text-amber-600"></i>
+      <!-- Interactive Hold-to-Acknowledge Rule Cards -->
+      <div class="space-y-4 font-mono text-xs pt-2">
+        <div class="text-[11px] text-faded uppercase tracking-wider flex items-center gap-1.5">
+          <i data-lucide="fingerprint" class="w-3.5 h-3.5 text-accent"></i>
+          <span>INTERACTION MANDATE: HOLD EACH RULE TO DISMANTLE EGO PARAMETERS</span>
+        </div>
+
+        <!-- Rule 01 Card -->
+        <div id="rule-btn-1" class="p-5 rounded-xl border border-slate-700 bg-wood hover:border-slate-500 transition cursor-pointer select-none relative overflow-hidden group">
+          <div id="rule-prog-1" class="absolute top-0 left-0 bottom-0 bg-accent/20 w-0 transition-all duration-100"></div>
+          <div class="relative z-10 flex justify-between items-start gap-4">
+            <div>
+              <div class="text-accent font-bold mb-1 flex items-center gap-2">
+                <i data-lucide="lock" class="w-4 h-4"></i> RULE 01: THE LAW OF SEVERANCE
+              </div>
+              <p class="text-slate-300 font-sans text-xs sm:text-sm">
+                If a friend wronged me or talked behind my back, I cut them off entirely. I would not utter a single syllable until they begged with a formal apology.
+              </p>
             </div>
-            <p class="leading-relaxed">
-              "We stayed inseparable through Class 2 and 3. I didn't know what love was, but my world was centered on her presence."
+            <span id="rule-status-1" class="text-[10px] bg-slate-800 text-slate-400 px-2.5 py-1 rounded whitespace-nowrap border border-slate-700">HOLD TO DISENGAGE</span>
+          </div>
+        </div>
+
+        <!-- Rule 02 Card -->
+        <div id="rule-btn-2" class="p-5 rounded-xl border border-slate-700 bg-wood hover:border-slate-500 transition cursor-pointer select-none relative overflow-hidden group opacity-50 pointer-events-none">
+          <div id="rule-prog-2" class="absolute top-0 left-0 bottom-0 bg-accent/20 w-0 transition-all duration-100"></div>
+          <div class="relative z-10 flex justify-between items-start gap-4">
+            <div>
+              <div class="text-accent font-bold mb-1 flex items-center gap-2">
+                <i data-lucide="shield" class="w-4 h-4"></i> RULE 02: ABSOLUTE EMOTIONAL DETACHMENT
+              </div>
+              <p class="text-slate-300 font-sans text-xs sm:text-sm">
+                I never naturally made friends. When girls proposed or flirted, I ignored them completely. Career first. The heart remains strictly locked away.
+              </p>
+            </div>
+            <span id="rule-status-2" class="text-[10px] bg-slate-800 text-slate-400 px-2.5 py-1 rounded whitespace-nowrap border border-slate-700">LOCKED</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Act 1 Brief Aftermath Story -->
+      <div id="act-1-aftermath" class="hidden p-5 rounded-xl border border-accent/30 bg-accent/5 font-serif italic text-base sm:text-lg text-slate-300 space-y-2 animate-fade-in">
+        <p>
+          "I was the definition of an egoist—guarded, disciplined, and utterly untouchable. Yet, beneath that calculated fortress sat the singular paradox of my life: <span class="text-white font-bold underline decoration-accent decoration-2">Fatima Ahmed Shaolin</span>."
+        </p>
+        <button id="proceed-to-act-2" class="mt-4 px-5 py-2.5 rounded-lg bg-accent text-void font-mono text-xs font-bold uppercase tracking-wider hover:bg-white transition flex items-center gap-2">
+          <span>PROCEED TO CLASSROOM 2016</span>
+          <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- STAGE 2: THE 2016 STICKY NOTE MEMORY -->
+    <!-- ========================================== -->
+    <section id="stage-2" class="stage-card stage-locked space-y-8 border-l-2 border-amber-400 pl-6 sm:pl-8 relative">
+      <div class="flex items-center gap-2 font-mono text-xs text-amber-300">
+        <span class="bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/30 font-bold">ACT 02</span>
+        <span>THE CLASSROOM IN 2016 // THE ONLY EXCEPTION</span>
+      </div>
+
+      <div class="space-y-4 font-serif text-lg sm:text-xl text-slate-200 leading-relaxed">
+        <p>
+          The seed was planted in 2016, when I was just eight years old in Class 1.
+        </p>
+        <p>
+          Because of the close bond between our mothers, Shaolin was the only girl allowed past my perimeter. At that age, you don't understand the concept of love, but you feel its weight. An irrational, sharp jealousy gripped me whenever she spoke to or played with anyone else. I would march straight to her mother and mine, lodging bitter, childish complaints that she was ignoring me.
+        </p>
+      </div>
+
+      <!-- Physical Interactive Sticky Note -->
+      <div class="py-6 text-center space-y-6">
+        <div class="text-[11px] font-mono text-faded uppercase tracking-wider">
+          TACTILE ARTIFACT // TAP SCISSORS TO PHYSICALLY SEVER 2018 RELOCATION
+        </div>
+
+        <div class="relative inline-block">
+          <div id="sticky-note" class="w-80 sm:w-96 mx-auto bg-amberNote text-neutral-900 p-6 rounded shadow-2xl border-t-8 border-amber-400 font-hand text-2xl transform -rotate-1 transition-all duration-700 space-y-4 animate-float-slow select-none">
+            <div class="flex justify-between items-center text-xs font-mono text-amber-900 uppercase tracking-widest">
+              <span>CLASSROOM MEMO: 2016–2018</span>
+              <i data-lucide="pin" class="w-4 h-4 text-amber-800"></i>
+            </div>
+            <p id="note-body-text" class="leading-relaxed">
+              "We stayed inseparable through Class 2 and Class 3. I didn't know what love was, but my world was centered on her presence."
             </p>
-            <div class="text-[11px] font-mono text-amber-900 text-right pt-2">
-              [Taped down in 2016 — Intact until 2018 move]
+            <div class="text-[11px] font-mono text-amber-900 text-right pt-2 border-t border-amber-300">
+              — Sealed until relocation (Late 2018)
             </div>
           </div>
         </div>
 
-        <!-- The Physical Tear Button -->
-        <div class="mt-6">
-          <button id="tear-memory-btn" class="px-5 py-2.5 rounded-lg border border-amber-400/50 bg-amber-400/10 text-amber-300 font-mono text-xs hover:bg-amber-400 hover:text-black transition-all flex items-center gap-2 mx-auto shadow-lg">
+        <div>
+          <button id="rip-action-btn" class="px-6 py-3 rounded-xl border border-amber-400/50 bg-amber-400/10 text-amber-300 font-mono text-xs font-bold uppercase tracking-wider hover:bg-amber-400 hover:text-black transition-all flex items-center gap-2.5 mx-auto shadow-lg active:scale-95">
             <i data-lucide="scissors" class="w-4 h-4"></i>
-            <span>[TEAR NOTE & TRIGGER 2018 RELOCATION SEVERANCE]</span>
+            <span>[TEAR NOTE & EXECUTE 2018 SEPARATION]</span>
           </button>
         </div>
+      </div>
 
-        <div id="tear-status" class="hidden font-mono text-xs text-faded italic pt-4">
-          [Paper torn in half. Complete silence endured from late 2018 to early 2025. 7 years lost to the void.]
-        </div>
+      <!-- Act 2 Brief Aftermath Story -->
+      <div id="act-2-aftermath" class="hidden p-5 rounded-xl border border-amber-400/30 bg-amber-400/5 font-serif text-base sm:text-lg text-slate-300 space-y-3 animate-fade-in">
+        <p>
+          "At the end of 2018, my father relocated our family to another city. We were only children—no phones, no accounts, no way to stay connected. For years, I believed time had buried that classroom. I didn't know that my heart had quietly frozen in place."
+        </p>
+        <button id="proceed-to-act-3" class="px-5 py-2.5 rounded-lg bg-amber-400 text-black font-mono text-xs font-bold uppercase tracking-wider hover:bg-white transition flex items-center gap-2">
+          <span>ENTER THE 7-YEAR VOID (2018–2025)</span>
+          <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
+        </button>
       </div>
     </section>
 
-    <!-- ACT 3: THE 2025 SMARTPHONE ALERT (SLIDE TO UNLOCK) -->
-    <section class="space-y-6 border-l-2 border-accent pl-6 relative">
-      <div class="flex items-center gap-2 font-mono text-xs text-accent">
-        <span class="bg-accent/10 px-2 py-0.5 rounded border border-accent/20">ACT 03</span>
-        <span>EARLY 2025 // THE SIGNAL AWAKENS</span>
+
+    <!-- ========================================== -->
+    <!-- STAGE 3: THE 7-YEAR VOID SCRUBBER (2018–2025) -->
+    <!-- ========================================== -->
+    <section id="stage-3" class="stage-card stage-locked space-y-8 border-l-2 border-slate-700 pl-6 sm:pl-8 relative">
+      <div class="flex items-center gap-2 font-mono text-xs text-slate-400">
+        <span class="bg-slate-800 px-2 py-0.5 rounded border border-slate-700 font-bold text-slate-300">ACT 03</span>
+        <span>THE SEVEN-YEAR SILENCE (2018–2025)</span>
       </div>
 
-      <p class="font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
-        After seven years of utter silence, a vibration echoed on my desk in early 2025. She had remembered me.
-      </p>
+      <div class="space-y-4 font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
+        <p>
+          Complete silence. Seven years of rigorous science exams, programming architectures, building systems, and keeping everyone at an absolute emotional distance.
+        </p>
+      </div>
 
-      <!-- Simulated Realistic Mobile Notification Device -->
-      <div class="max-w-sm mx-auto bg-slate-950 p-4 rounded-3xl border-2 border-slate-700 shadow-2xl space-y-4">
-        <div class="flex justify-between items-center text-[10px] font-mono text-slate-500 px-2">
-          <span>02:14 AM</span>
-          <div class="flex items-center gap-1"><i data-lucide="wifi" class="w-3 h-3"></i><i data-lucide="battery" class="w-3 h-3"></i></div>
+      <!-- Physical Year Scrubber -->
+      <div class="p-6 rounded-2xl border border-slate-800 bg-wood/90 space-y-6">
+        <div class="flex justify-between items-center font-mono text-xs">
+          <span class="text-faded">DRAG TIMELINE FORWARD:</span>
+          <span id="timeline-year-display" class="text-accent font-bold text-base">2018 (CLASS 3 RELOCATION)</span>
         </div>
 
-        <div id="phone-notification" class="p-4 rounded-2xl bg-wood border border-accent/30 flex items-start gap-3 shadow-lg">
-          <div class="w-10 h-10 rounded-full bg-accent/20 border border-accent flex items-center justify-center font-display font-bold text-accent shrink-0">
+        <input id="time-slider" type="range" min="2018" max="2025" value="2018" step="1" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-accent">
+
+        <div class="flex justify-between font-mono text-[10px] text-faded uppercase">
+          <span>2018 (Separation)</span>
+          <span>2020 (Isolation)</span>
+          <span>2022 (Coding Walls)</span>
+          <span>2025 (Signal)</span>
+        </div>
+      </div>
+
+      <!-- Act 3 Brief Aftermath Story -->
+      <div id="act-3-aftermath" class="hidden p-5 rounded-xl border border-accent/30 bg-accent/5 font-serif text-base sm:text-lg text-slate-300 space-y-3 animate-fade-in">
+        <p>
+          "2,300+ days passed without a single word. Then, in early 2025, a sudden notification lit up the darkness of my screen."
+        </p>
+        <button id="proceed-to-act-4" class="px-5 py-2.5 rounded-lg bg-accent text-void font-mono text-xs font-bold uppercase tracking-wider hover:bg-white transition flex items-center gap-2">
+          <span>RECEIVE TRANSMISSION (2025–2026)</span>
+          <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- STAGE 4: THE 2025 RECONNECT & MATERNAL MANDATE -->
+    <!-- ========================================== -->
+    <section id="stage-4" class="stage-card stage-locked space-y-8 border-l-2 border-accent pl-6 sm:pl-8 relative">
+      <div class="flex items-center gap-2 font-mono text-xs text-accent">
+        <span class="bg-accent/10 px-2 py-0.5 rounded border border-accent/30 font-bold">ACT 04</span>
+        <span>SIGNAL RESUMPTION // THE REUNION (2025–2026)</span>
+      </div>
+
+      <div class="space-y-4 font-serif text-lg sm:text-xl text-slate-200 leading-relaxed">
+        <p>
+          In early 2025, she remembered me. Over the course of the next year, our conversations were sparse, polite, and respectful—brief messages every few months that maintained a dignified distance. But every exchange carried the weight of the years we had lost.
+        </p>
+      </div>
+
+      <!-- Interactive Smartphone Simulation -->
+      <div class="max-w-sm mx-auto bg-slate-950 p-5 rounded-[2.5rem] border-4 border-slate-700 shadow-2xl space-y-5">
+        <div class="flex justify-between items-center text-[10px] font-mono text-slate-500 px-3">
+          <span>11:42 PM</span>
+          <div class="flex items-center gap-1.5">
+            <i data-lucide="wifi" class="w-3 h-3 text-accent"></i>
+            <i data-lucide="battery" class="w-3 h-3 text-emerald-400"></i>
+          </div>
+        </div>
+
+        <div id="phone-screen-card" class="p-4 rounded-2xl bg-wood border border-accent/30 flex items-start gap-3.5 shadow-lg">
+          <div class="w-11 h-11 rounded-full bg-accent/20 border border-accent flex items-center justify-center font-display font-bold text-accent shrink-0 text-base">
             S
           </div>
           <div class="space-y-1 text-left flex-1">
             <div class="text-xs font-bold text-white flex justify-between">
-              <span>Shaolin</span>
-              <span class="text-[10px] font-mono text-accent">Facebook</span>
+              <span>Fatima Ahmed Shaolin</span>
+              <span class="text-[9px] font-mono text-accent bg-accent/10 px-1.5 py-0.5 rounded">NEW REQUEST</span>
             </div>
-            <p class="text-xs text-slate-300 font-sans">Sent you a friend request.</p>
+            <p class="text-xs text-slate-300 font-sans">Sent you a friend request on Facebook.</p>
           </div>
         </div>
 
-        <button id="unlock-msg-btn" class="w-full py-2.5 rounded-xl bg-accent text-slate-950 font-mono font-bold text-xs uppercase tracking-wider hover:bg-white transition flex items-center justify-center gap-2">
-          <i data-lucide="check" class="w-4 h-4"></i> Accept & Unlock 2026 Mandate
+        <button id="accept-signal-btn" class="w-full py-3 rounded-xl bg-accent text-slate-950 font-mono font-bold text-xs uppercase tracking-wider hover:bg-white transition flex items-center justify-center gap-2 shadow-lg">
+          <i data-lucide="user-check" class="w-4 h-4"></i>
+          <span>ACCEPT & CONNECT ARCHIVE</span>
         </button>
       </div>
 
-      <!-- Mother's Mandate Dialogue Card -->
-      <div id="mother-mandate" class="hidden p-6 rounded-xl border border-accent/40 bg-wood/90 font-serif italic text-lg text-slate-100 space-y-3 shadow-2xl">
-        <p>"I have seen many girls, Tonmoy. I don't trust a stranger to enter this house as my daughter-in-law. I want Shaolin to be your wife."</p>
-        <div class="text-xs font-mono text-accent not-italic flex items-center gap-2">
-          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Family approval granted at Noapra, Jashore (2026)
+      <!-- Maternal Mandate & Reunion (Revealed after button) -->
+      <div id="reunion-narrative" class="hidden space-y-6 pt-4 animate-fade-in">
+        <div class="p-6 rounded-xl border border-accent/40 bg-wood/90 font-serif italic text-lg text-slate-100 space-y-3">
+          <p>"I have seen many girls, Tonmoy. I don't trust a stranger to enter this house as my daughter-in-law. I will make a decision for your future that you cannot deny—I want Shaolin to be your wife."</p>
+          <div class="text-xs font-mono text-accent not-italic flex items-center gap-2">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> My Mother's Unyielding Conviction (2026)
+          </div>
         </div>
+
+        <div class="font-serif text-lg sm:text-xl text-slate-200 leading-relaxed space-y-4">
+          <p>
+            In 2026, my mother and I traveled back to our old region, staying at my maternal aunt's home in Noapra, Jashore, with a checkup trip to Khulna City Medical College. Shaolin and her family visited us. As we all sat together in the living room, my aunt and sisters turned to my mother in unanimous approval:
+          </p>
+          <div class="p-4 bg-slate-900 border-l-2 border-slate-600 italic text-center">
+            "She is so graceful, calm, and composed. She matches Tonmoy perfectly. They look as if they were made for each other."
+          </div>
+          <p>
+            I never wanted casual dating. If I wanted options, I could have said yes to dozens of proposals over the years. I wanted to marry her. With my family's total backing, I resolved to break my silence.
+          </p>
+        </div>
+
+        <button id="proceed-to-act-5" class="px-5 py-2.5 rounded-lg bg-accent text-void font-mono text-xs font-bold uppercase tracking-wider hover:bg-white transition flex items-center gap-2">
+          <span>INITIATE UNFILTERED CONFESSION</span>
+          <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
+        </button>
       </div>
     </section>
 
-    <!-- ACT 4: THE CONFESSION & GLASS BREAK CRASH -->
-    <section class="space-y-6 border-l-2 border-crimson pl-6 relative">
+
+    <!-- ========================================== -->
+    <!-- STAGE 5: THE CONFESSION & THE CRITICAL HEARTBREAK -->
+    <!-- ========================================== -->
+    <section id="stage-5" class="stage-card stage-locked space-y-8 border-l-2 border-crimson pl-6 sm:pl-8 relative">
       <div class="flex items-center gap-2 font-mono text-xs text-crimson">
-        <span class="bg-crimson/10 px-2 py-0.5 rounded border border-crimson/20">ACT 04</span>
-        <span>THE COLLAPSE OF PRIDE // THE REJECTION</span>
+        <span class="bg-crimson/10 px-2 py-0.5 rounded border border-crimson/30 font-bold">ACT 05</span>
+        <span>THE SURRENDER OF PRIDE // THE FRACTURE</span>
       </div>
 
-      <p class="font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
-        I stripped away my ego. I asked her friend, then reached out to Shaolin directly:
-      </p>
+      <div class="space-y-4 font-serif text-lg sm:text-xl text-slate-200 leading-relaxed">
+        <p>
+          I contacted her closest friend first to inquire about her heart. When questioned repeatedly if I truly loved her, I discarded a lifetime of pride: <strong>"Yes. I love her."</strong>
+        </p>
+        <p class="text-crimson font-mono text-sm">
+          Then came the devastating reality: Shaolin was already deeply in love with someone else—a senior named Roktim.
+        </p>
+        <p>
+          Desperate, I reached out to Shaolin directly.
+        </p>
+      </div>
 
-      <!-- Live Typing Terminal Box -->
-      <div class="p-6 rounded-2xl border-2 border-crimson/40 bg-black/90 space-y-4 font-mono text-xs">
-        <div class="flex items-center justify-between text-crimson uppercase tracking-wider text-[11px]">
-          <span class="flex items-center gap-1.5"><i data-lucide="terminal" class="w-3.5 h-3.5"></i> UNFILTERED TRANSMISSION</span>
+      <!-- Interactive Typing Terminal -->
+      <div class="p-6 rounded-2xl border-2 border-crimson/50 bg-black/95 space-y-5 font-mono text-xs shadow-2xl">
+        <div class="flex justify-between items-center text-crimson text-[11px] uppercase tracking-wider">
+          <span class="flex items-center gap-2"><i data-lucide="terminal" class="w-4 h-4"></i> TERMINAL OVERRIDE // DIRECT PLEA</span>
           <span>RECIPIENT: SHAOLIN</span>
         </div>
 
-        <div class="p-4 rounded-xl bg-wood border-l-4 border-accent text-slate-200 font-serif text-base italic">
-          "I have loved you for years without touching you, without seeing you, without demanding your presence. My love has been entirely pure. Please, give me just one chance."
+        <!-- Simulated Typing Area -->
+        <div class="p-4 rounded-xl bg-wood border-l-4 border-accent space-y-2">
+          <div class="text-accent text-[10px] font-bold uppercase">TONMOY'S TRANSMISSION:</div>
+          <p id="typewriter-text" class="text-slate-200 font-serif text-base italic leading-relaxed min-h-[4rem]">
+            <!-- Word by word will inject here -->
+          </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-wood border-l-4 border-slate-600 text-slate-200 font-serif text-base italic">
-          "I respect your love, Tonmoy. But my heart belongs to someone else [Roktim]. Even if you were the best person in the world, the person I love remains the best to me at all costs."
-        </div>
+        <button id="type-plea-btn" class="w-full py-3.5 rounded-xl bg-accent text-void font-mono font-bold text-xs uppercase tracking-wider hover:bg-white transition flex items-center justify-center gap-2">
+          <i data-lucide="keyboard" class="w-4 h-4"></i>
+          <span>CLICK TO TRANSMIT RAW WORDS</span>
+        </button>
 
-        <!-- The Physical Heartbreak Strike Button -->
-        <button id="break-glass-btn" class="w-full py-4 rounded-xl bg-crimson text-white font-mono font-bold text-xs uppercase tracking-widest hover:bg-rose-600 transition-all flex items-center justify-center gap-2 shadow-2xl active:scale-95">
-          <i data-lucide="heart-crack" class="w-4 h-4"></i>
-          [CLICK TO PLEAD, DESTROY EGO & SHATTER REALITY]
+        <!-- Shaolin's Response (Hidden until typed) -->
+        <div id="shaolin-response" class="hidden space-y-4 pt-2 animate-fade-in">
+          <div class="p-4 rounded-xl bg-wood border-l-4 border-slate-500 space-y-2">
+            <div class="text-slate-400 text-[10px] font-bold uppercase">SHAOLIN'S RESPONSE:</div>
+            <p class="text-slate-200 font-serif text-base italic leading-relaxed">
+              "I respect your love, Tonmoy. But my heart belongs to someone else. Even if you were the best person in the world, the person I love remains the best to me at all costs."
+            </p>
+          </div>
+
+          <!-- The Physical Shatter / Begging Trigger -->
+          <button id="shatter-ego-btn" class="w-full py-4 rounded-xl bg-crimson text-white font-mono font-bold text-xs uppercase tracking-widest hover:bg-rose-600 transition flex items-center justify-center gap-2.5 shadow-[0_0_30px_rgba(225,29,72,0.4)] animate-heart-beat">
+            <i data-lucide="heart-crack" class="w-4 h-4"></i>
+            <span>BEG FOR A CHANCE & FRACTURE ALL PRIDE</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Act 5 Brief Aftermath Story -->
+      <div id="act-5-aftermath" class="hidden font-serif text-lg sm:text-xl text-slate-200 leading-relaxed space-y-4 animate-fade-in">
+        <p>
+          And then, the unthinkable happened.
+        </p>
+        <p>
+          I—the boy who would cut off lifelong friends until they begged for forgiveness, the boy who refused to speak to anyone who dared utter a single word behind my back—begged her.
+        </p>
+        <p>
+          I pleaded for a chance. And with the same unwavering, polite respect, she stood firm in her loyalty to Roktim. The very loyalty that made her the most honorable person in my eyes was the exact wall that shut me out forever.
+        </p>
+        <button id="proceed-to-act-6" class="px-5 py-2.5 rounded-lg bg-slate-800 text-white border border-slate-700 font-mono text-xs font-bold uppercase tracking-wider hover:bg-slate-700 transition flex items-center gap-2">
+          <span>ENTER THE NUMB STATE</span>
+          <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
         </button>
       </div>
     </section>
 
-    <!-- ACT 5: THE COLD NUMB EPILOGUE -->
-    <section id="final-monument" class="space-y-8 border-l-2 border-slate-700 pl-6 relative transition-opacity duration-1000 opacity-40">
-      <div class="flex items-center gap-2 font-mono text-xs text-faded">
-        <span class="bg-wood px-2 py-0.5 rounded border border-slate-800">ACT 05</span>
-        <span>THE NUMBED REALITY</span>
+
+    <!-- ========================================== -->
+    <!-- STAGE 6: THE NUMBED REALITY & SEALED MONUMENT -->
+    <!-- ========================================== -->
+    <section id="stage-6" class="stage-card stage-locked space-y-12 border-l-2 border-slate-700 pl-6 sm:pl-8 relative">
+      <div class="flex items-center gap-2 font-mono text-xs text-slate-400">
+        <span class="bg-slate-800 px-2 py-0.5 rounded border border-slate-700 font-bold">ACT 06</span>
+        <span>THE NUMBED REALITY // THE PERMANENT RECORD</span>
       </div>
 
-      <div class="font-serif text-lg sm:text-xl text-slate-300 leading-relaxed space-y-4">
+      <div class="space-y-6 font-serif text-lg sm:text-xl text-slate-300 leading-relaxed">
         <p>
-          I—the boy who would cut off lifelong friends until they begged for forgiveness—begged her. And with unwavering loyalty to the person she loved, she shut the door forever.
+          The decline broke the internal machinery that used to drive me. Today, I am completely lost. The sharp focus that once allowed me to master complex science problems and write intricate lines of code feels dulled, slipping through my fingers like water.
+        </p>
+
+        <!-- Two Cards of the Transformed State -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-sans not-italic text-xs">
+          <div class="p-5 rounded-xl border border-slate-800 bg-wood/70 space-y-2">
+            <div class="font-bold text-white text-sm">The Death of Ego</div>
+            <p class="text-slate-400 leading-normal">
+              The pride that once demanded apologies is gone. If someone insults me, disrespects me, or speaks behind my back now, it registers as absolute zero.
+            </p>
+          </div>
+          <div class="p-5 rounded-xl border border-slate-800 bg-wood/70 space-y-2">
+            <div class="font-bold text-white text-sm">The Complete Numbness</div>
+            <p class="text-slate-400 leading-normal">
+              It doesn't hurt; it doesn't anger me. I am so deeply locked within my own hollow space that the outside world has lost its power to evoke a reaction.
+            </p>
+          </div>
+        </div>
+
+        <p>
+          My family still speaks casually about approaching her family with a formal proposal in the future. They have no idea that the entire war was already fought and lost in the private silence of my screen.
         </p>
         <p>
-          The focus that powered my software and science masteries broke. But in its place came a stranger peace: <strong>The complete death of ego</strong>. If someone insults me now, it registers as nothing. I am hollowed out.
+          Friends tell me: <em>"Tonmoy, you are 18. You're brilliant, you have a massive future, you will find someone better."</em> They don't understand. If I wanted options, I would have taken the ones that came to me. I never wanted an upgrade. I only ever wanted Shaolin.
         </p>
       </div>
 
-      <!-- Sealed Monument Block -->
-      <div class="p-8 sm:p-12 rounded-2xl border border-slate-800 bg-gradient-to-b from-wood to-desk text-center space-y-6 shadow-2xl relative overflow-hidden">
-        <div class="font-mono text-xs tracking-widest text-accent uppercase">EPILOGUE // THE UNBREAKABLE MEMORY</div>
-        <p class="font-serif italic text-2xl sm:text-3xl text-white max-w-xl mx-auto leading-relaxed">
+      <!-- Permanent Monument Sealed Container -->
+      <div class="p-8 sm:p-14 rounded-3xl border border-slate-800 bg-gradient-to-b from-wood via-desk to-void text-center space-y-6 shadow-2xl relative overflow-hidden">
+        <div class="inline-block px-3 py-1 rounded-full border border-accent/30 bg-accent/10 font-mono text-[10px] text-accent tracking-widest uppercase">
+          EPILOGUE // THE LOCKED SYSTEM
+        </div>
+        <p class="font-serif italic text-2xl sm:text-4xl text-white max-w-xl mx-auto leading-relaxed drop-shadow">
           "I gave the absolute purest, most humble version of myself to the only person who ever mattered."
         </p>
-        <div class="font-mono text-xs text-faded uppercase pt-4">
+        <div class="font-mono text-xs text-faded uppercase tracking-widest pt-4">
           MUNTASIR SHAHRIAR TONMOY — 2026
         </div>
       </div>
     </section>
 
-  </div>
+  </main>
 
-  <!-- Interactive JavaScript Engine -->
+  <!-- Interactive Simulation Engine Logic -->
   <script>
+    // Initialize Icons
     lucide.createIcons();
 
-    // 1. Realistic Mouse Flashlight Lighting
+    // ==========================================
+    // 1. DYNAMIC CURSOR LIGHTING & SPOTLIGHT
+    // ==========================================
     window.addEventListener('mousemove', (e) => {
-      document.body.style.setProperty('--mouse-x', `${e.clientX}px`);
-      document.body.style.setProperty('--mouse-y', `${e.clientY}px`);
+      document.body.style.setProperty('--cursor-x', `${e.clientX}px`);
+      document.body.style.setProperty('--cursor-y', `${e.clientY}px`);
     });
 
-    // 2. Physical Web Audio Acoustic Synthesizer
+    // ==========================================
+    // 2. SYNTHESIZED WEB AUDIO SOUND ENGINE
+    // ==========================================
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
+    let isSoundEnabled = true;
 
-    function getAudio() {
+    function getAudioContext() {
       if (!audioCtx) {
         audioCtx = new AudioContext();
       }
@@ -333,149 +621,398 @@
       return audioCtx;
     }
 
-    // Play synthesized glass crack / tear sounds
     function playSfx(type) {
-      const ctx = getAudio();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+      if (!isSoundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
 
-      if (type === 'tear') {
-        // High friction paper tear
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(400, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.35);
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-      } else if (type === 'glass') {
-        // High pitch crash & sub bass drop
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(800, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.8);
-        gain.gain.setValueAtTime(0.4, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
-      } else if (type === 'chime') {
-        // Notification chime
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
-        osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1); // A5
-        gain.gain.setValueAtTime(0.15, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-      }
+        if (type === 'unlock') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.25);
+          gain.gain.setValueAtTime(0.12, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+        } else if (type === 'tear') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(320, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(60, ctx.currentTime + 0.35);
+          gain.gain.setValueAtTime(0.18, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+        } else if (type === 'chime') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+          osc.frequency.setValueAtTime(880, ctx.currentTime + 0.12);
+          gain.gain.setValueAtTime(0.15, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+        } else if (type === 'type') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600 + Math.random() * 200, ctx.currentTime);
+          gain.gain.setValueAtTime(0.04, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+        } else if (type === 'shatter') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(900, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.9);
+          gain.gain.setValueAtTime(0.4, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.9);
+        }
 
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.8);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 1.0);
+      } catch (e) {}
     }
 
-    // 3. Physical Paper Tear Interaction
-    const tearBtn = document.getElementById('tear-memory-btn');
-    const paper = document.getElementById('memory-paper');
-    const tearStatus = document.getElementById('tear-status');
+    const audioMasterBtn = document.getElementById('audio-master-btn');
+    const audioBtnLabel = document.getElementById('audio-btn-label');
+    const audioIcon = document.getElementById('audio-icon');
 
-    tearBtn.addEventListener('click', () => {
+    audioMasterBtn.addEventListener('click', () => {
+      isSoundEnabled = !isSoundEnabled;
+      if (isSoundEnabled) {
+        audioBtnLabel.textContent = "AUDIO ENGINE: ACTIVE";
+        audioMasterBtn.classList.add('border-accent', 'text-accent');
+        playSfx('unlock');
+      } else {
+        audioBtnLabel.textContent = "AUDIO ENGINE: MUTED";
+        audioMasterBtn.classList.remove('border-accent', 'text-accent');
+      }
+    });
+
+    // ==========================================
+    // 3. PROGRESS MANAGER & HUD DIRECTOR
+    // ==========================================
+    let currentStep = 0;
+    const totalSteps = 6;
+    const hudStep = document.getElementById('hud-step');
+    const hudStatus = document.getElementById('hud-status');
+    const progressBar = document.getElementById('experience-progress');
+
+    function updateProgress(step, statusMsg) {
+      currentStep = step;
+      hudStep.textContent = `ACT ${step} OF ${totalSteps}`;
+      hudStatus.textContent = statusMsg;
+      progressBar.style.width = `${(step / totalSteps) * 100}%`;
+    }
+
+    function unlockStage(stageId) {
+      const el = document.getElementById(stageId);
+      if (el) {
+        el.classList.remove('stage-locked');
+        el.classList.add('stage-active');
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    // ==========================================
+    // 4. STAGE 0: INITIALIZATION
+    // ==========================================
+    document.getElementById('start-btn').addEventListener('click', () => {
+      getAudioContext();
+      playSfx('unlock');
+      updateProgress(1, "DISMANTLE EGO RULES");
+      unlockStage('stage-1');
+    });
+
+    // ==========================================
+    // 5. STAGE 1: HOLD TO DISMANTLE RULES
+    // ==========================================
+    let rule1Completed = false;
+    let rule2Completed = false;
+
+    function setupHoldButton(btnId, progId, statusId, onComplete) {
+      const btn = document.getElementById(btnId);
+      const prog = document.getElementById(progId);
+      const status = document.getElementById(statusId);
+      let holdTimer = null;
+      let progress = 0;
+
+      function startHold() {
+        if (progress >= 100) return;
+        getAudioContext();
+        holdTimer = setInterval(() => {
+          progress += 5;
+          prog.style.width = progress + '%';
+          if (progress % 20 === 0) playSfx('type');
+          if (progress >= 100) {
+            clearInterval(holdTimer);
+            status.textContent = "DISENGAGED";
+            status.classList.remove('text-slate-400', 'bg-slate-800');
+            status.classList.add('text-crimson', 'bg-crimson/20', 'border-crimson');
+            playSfx('unlock');
+            onComplete();
+          }
+        }, 30);
+      }
+
+      function cancelHold() {
+        if (progress < 100) {
+          clearInterval(holdTimer);
+          progress = 0;
+          prog.style.width = '0%';
+        }
+      }
+
+      btn.addEventListener('mousedown', startHold);
+      btn.addEventListener('mouseup', cancelHold);
+      btn.addEventListener('mouseleave', cancelHold);
+      btn.addEventListener('touchstart', (e) => { e.preventDefault(); startHold(); });
+      btn.addEventListener('touchend', cancelHold);
+    }
+
+    setupHoldButton('rule-btn-1', 'rule-prog-1', 'rule-status-1', () => {
+      rule1Completed = true;
+      const r2 = document.getElementById('rule-btn-2');
+      r2.classList.remove('opacity-50', 'pointer-events-none');
+      document.getElementById('rule-status-2').textContent = "HOLD TO DISENGAGE";
+    });
+
+    setupHoldButton('rule-btn-2', 'rule-prog-2', 'rule-status-2', () => {
+      rule2Completed = true;
+      document.getElementById('act-1-aftermath').classList.remove('hidden');
+    });
+
+    document.getElementById('proceed-to-act-2').addEventListener('click', () => {
+      playSfx('unlock');
+      updateProgress(2, "CLASSROOM MEMORY SEVERANCE");
+      unlockStage('stage-2');
+    });
+
+    // ==========================================
+    // 6. STAGE 2: RIPPING THE 2016 NOTE
+    // ==========================================
+    const ripActionBtn = document.getElementById('rip-action-btn');
+    const stickyNote = document.getElementById('sticky-note');
+    const act2Aftermath = document.getElementById('act-2-aftermath');
+
+    ripActionBtn.addEventListener('click', () => {
       playSfx('tear');
-
-      // Visual paper rip with dual segments
-      paper.innerHTML = `
-        <div class="flex justify-between items-center text-xs font-mono text-slate-500 uppercase tracking-widest mb-2">
-          <span>CLASSROOM LOG: 2016–2018</span>
+      stickyNote.innerHTML = `
+        <div class="flex justify-between items-center text-xs font-mono text-amber-900 uppercase tracking-widest mb-2">
+          <span>CLASSROOM MEMO: 2016–2018</span>
           <span class="text-crimson font-bold">SEVERED</span>
         </div>
-        <div class="grid grid-cols-2 gap-2 text-sm text-slate-600 font-mono">
-          <div class="torn-left p-2 border-r border-dashed border-red-500">"We stayed inseparable... my world was centered..."</div>
-          <div class="torn-right p-2">"...silence began. 7 years into darkness."</div>
+        <div class="grid grid-cols-2 gap-2 text-sm text-amber-900 font-hand">
+          <div class="paper-tear-left p-2 border-r border-dashed border-red-500">"We stayed inseparable through Class 2 and 3..."</div>
+          <div class="paper-tear-right p-2">"...silence began. 7 years lost to the void."</div>
         </div>
       `;
 
       confetti({
-        particleCount: 40,
-        spread: 60,
+        particleCount: 50,
+        spread: 70,
         origin: { y: 0.45 },
-        colors: ['#FFFBEB', '#FDE68A', '#D97706']
+        colors: ['#FEF3C7', '#FDE68A', '#D97706']
       });
 
-      tearBtn.style.display = 'none';
-      tearStatus.classList.remove('hidden');
+      ripActionBtn.style.display = 'none';
+      act2Aftermath.classList.remove('hidden');
     });
 
-    // 4. Smartphone Unlock Action
-    const unlockBtn = document.getElementById('unlock-msg-btn');
-    const motherMandate = document.getElementById('mother-mandate');
+    document.getElementById('proceed-to-act-3').addEventListener('click', () => {
+      playSfx('unlock');
+      updateProgress(3, "SCRUB THROUGH THE 7-YEAR VOID");
+      unlockStage('stage-3');
+    });
 
-    unlockBtn.addEventListener('click', () => {
+    // ==========================================
+    // 7. STAGE 3: THE 7-YEAR SCRUBBER
+    // ==========================================
+    const timeSlider = document.getElementById('time-slider');
+    const timelineYearDisplay = document.getElementById('timeline-year-display');
+    const act3Aftermath = document.getElementById('act-3-aftermath');
+
+    timeSlider.addEventListener('input', (e) => {
+      const year = e.target.value;
+      playSfx('type');
+      if (year === "2018") {
+        timelineYearDisplay.textContent = "2018 (CLASS 3 RELOCATION)";
+      } else if (year < 2025) {
+        timelineYearDisplay.textContent = `${year} (FROZEN IN SILENCE)`;
+      } else {
+        timelineYearDisplay.textContent = "2025 (THE FACEBOOK TRANSMISSION)";
+        timelineYearDisplay.classList.add('text-emerald-400');
+        act3Aftermath.classList.remove('hidden');
+      }
+    });
+
+    document.getElementById('proceed-to-act-4').addEventListener('click', () => {
       playSfx('chime');
-      unlockBtn.innerHTML = `<span class="text-slate-900 font-bold">SIGNAL RECEIVED // ARCHIVE LINKED</span>`;
-      unlockBtn.disabled = true;
-      motherMandate.classList.remove('hidden');
+      updateProgress(4, "RECEIVE 2025 SIGNAL & MANDATE");
+      unlockStage('stage-4');
     });
 
-    // 5. Canvas Glass Shatter & Reality Collapse Simulation
-    const breakGlassBtn = document.getElementById('break-glass-btn');
-    const canvas = document.getElementById('shatter-canvas');
-    const ctx = canvas.getContext('2d');
-    const finalAct = document.getElementById('final-monument');
+    // ==========================================
+    // 8. STAGE 4: PHONE UNLOCK & REUNION
+    // ==========================================
+    const acceptSignalBtn = document.getElementById('accept-signal-btn');
+    const reunionNarrative = document.getElementById('reunion-narrative');
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    acceptSignalBtn.addEventListener('click', () => {
+      playSfx('chime');
+      acceptSignalBtn.innerHTML = `<span class="text-slate-900 font-bold">SIGNAL RECEIVED & UNLOCKED</span>`;
+      acceptSignalBtn.disabled = true;
+      reunionNarrative.classList.remove('hidden');
+    });
 
-    // Draw realistic glass fractures
-    function drawCracks(startX, startY) {
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-      ctx.lineWidth = 1.5;
-      ctx.shadowColor = 'rgba(56, 189, 248, 0.8)';
-      ctx.shadowBlur = 8;
+    document.getElementById('proceed-to-act-5').addEventListener('click', () => {
+      playSfx('unlock');
+      updateProgress(5, "TRANSMIT UNFILTERED PLEA");
+      unlockStage('stage-5');
+    });
 
-      const numLines = 24;
-      for (let i = 0; i < numLines; i++) {
-        let angle = (i / numLines) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
-        let dist = 100 + Math.random() * 400;
-        
-        ctx.beginPath();
-        ctx.moveTo(startX, startY);
-        
-        let curX = startX;
-        let curY = startY;
-        for (let step = 0; step < 5; step++) {
-          curX += Math.cos(angle) * (dist / 5) + (Math.random() - 0.5) * 30;
-          curY += Math.sin(angle) * (dist / 5) + (Math.random() - 0.5) * 30;
-          ctx.lineTo(curX, curY);
+    // ==========================================
+    // 9. STAGE 5: TYPEWRITER CONFESSION & GLASS FRACTURE
+    // ==========================================
+    const pleaWords = [
+      "I", "have", "loved", "you", "for", "years", "without", "touching", "you,",
+      "without", "seeing", "you,", "without", "demanding", "your", "presence.",
+      "My", "love", "has", "been", "entirely", "pure.", "Please,", "give", "me", "just", "one", "chance."
+    ];
+    let wordIndex = 0;
+    const typewriterText = document.getElementById('typewriter-text');
+    const typePleaBtn = document.getElementById('type-plea-btn');
+    const shaolinResponse = document.getElementById('shaolin-response');
+
+    typePleaBtn.addEventListener('click', () => {
+      if (wordIndex < pleaWords.length) {
+        playSfx('type');
+        typewriterText.textContent += (wordIndex > 0 ? " " : "") + pleaWords[wordIndex];
+        wordIndex++;
+        if (wordIndex >= pleaWords.length) {
+          typePleaBtn.style.display = 'none';
+          shaolinResponse.classList.remove('hidden');
+          shaolinResponse.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
-        ctx.stroke();
+      }
+    });
+
+    // Canvas Fracture Drawing Engine
+    const glassCanvas = document.getElementById('glass-canvas');
+    const glassCtx = glassCanvas.getContext('2d');
+
+    function resizeGlassCanvas() {
+      glassCanvas.width = window.innerWidth;
+      glassCanvas.height = window.innerHeight;
+    }
+    resizeGlassCanvas();
+    window.addEventListener('resize', resizeGlassCanvas);
+
+    function drawRealisticCracks(centerX, centerY) {
+      glassCtx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+      glassCtx.lineWidth = 1.6;
+      glassCtx.shadowColor = 'rgba(225, 29, 72, 0.8)';
+      glassCtx.shadowBlur = 10;
+
+      const numRays = 32;
+      for (let i = 0; i < numRays; i++) {
+        let angle = (i / numRays) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+        let length = 120 + Math.random() * 450;
+
+        glassCtx.beginPath();
+        glassCtx.moveTo(centerX, centerY);
+
+        let curX = centerX;
+        let curY = centerY;
+        for (let seg = 0; seg < 6; seg++) {
+          curX += Math.cos(angle) * (length / 6) + (Math.random() - 0.5) * 35;
+          curY += Math.sin(angle) * (length / 6) + (Math.random() - 0.5) * 35;
+          glassCtx.lineTo(curX, curY);
+        }
+        glassCtx.stroke();
       }
     }
 
-    breakGlassBtn.addEventListener('click', (e) => {
-      playSfx('glass');
-      document.body.classList.add('impact-active');
+    const shatterEgoBtn = document.getElementById('shatter-ego-btn');
+    const act5Aftermath = document.getElementById('act-5-aftermath');
 
-      const rect = breakGlassBtn.getBoundingClientRect();
+    shatterEgoBtn.addEventListener('click', (e) => {
+      playSfx('shatter');
+      document.body.classList.add('screen-shatter-active');
+
+      const rect = shatterEgoBtn.getBoundingClientRect();
       const clickX = rect.left + rect.width / 2;
       const clickY = rect.top + rect.height / 2;
 
-      drawCracks(clickX, clickY);
+      drawRealisticCracks(clickX, clickY);
 
       confetti({
-        particleCount: 150,
+        particleCount: 160,
         spread: 120,
         origin: { y: 0.65 },
-        colors: ['#E11D48', '#38BDF8', '#FFFFFF']
+        colors: ['#E11D48', '#881337', '#FFFFFF', '#38BDF8']
       });
 
-      breakGlassBtn.innerHTML = `WALLS BROKEN // PRIDE ERADICATED`;
-      breakGlassBtn.disabled = true;
+      shatterEgoBtn.innerHTML = `<span>PRIDE ERADICATED // RECORD PERMANENT</span>`;
+      shatterEgoBtn.disabled = true;
 
       setTimeout(() => {
-        document.body.classList.remove('impact-active');
-        finalAct.classList.remove('opacity-40');
-        finalAct.classList.add('opacity-100');
-        finalAct.scrollIntoView({ behavior: 'smooth' });
-      }, 600);
+        document.body.classList.remove('screen-shatter-active');
+        act5Aftermath.classList.remove('hidden');
+      }, 750);
     });
+
+    document.getElementById('proceed-to-act-6').addEventListener('click', () => {
+      playSfx('unlock');
+      updateProgress(6, "PERMANENT SEALED MONUMENT");
+      unlockStage('stage-6');
+    });
+
+    // ==========================================
+    // 10. BACKGROUND VOID PARTICLES (PHYSICS)
+    // ==========================================
+    const voidCanvas = document.getElementById('void-canvas');
+    const voidCtx = voidCanvas.getContext('2d');
+    let particles = [];
+
+    function resizeVoidCanvas() {
+      voidCanvas.width = window.innerWidth;
+      voidCanvas.height = window.innerHeight;
+    }
+    resizeVoidCanvas();
+    window.addEventListener('resize', resizeVoidCanvas);
+
+    class MemoryDust {
+      constructor() {
+        this.x = Math.random() * voidCanvas.width;
+        this.y = Math.random() * voidCanvas.height;
+        this.size = Math.random() * 1.8 + 0.5;
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = (Math.random() - 0.5) * 0.4;
+        this.alpha = Math.random() * 0.5 + 0.1;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0) this.x = voidCanvas.width;
+        if (this.x > voidCanvas.width) this.x = 0;
+        if (this.y < 0) this.y = voidCanvas.height;
+        if (this.y > voidCanvas.height) this.y = 0;
+      }
+      draw() {
+        voidCtx.fillStyle = `rgba(56, 189, 248, ${this.alpha})`;
+        voidCtx.beginPath();
+        voidCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        voidCtx.fill();
+      }
+    }
+
+    for (let i = 0; i < 45; i++) {
+      particles.push(new MemoryDust());
+    }
+
+    function animateVoid() {
+      voidCtx.clearRect(0, 0, voidCanvas.width, voidCanvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateVoid);
+    }
+    animateVoid();
   </script>
 </body>
 </html>
